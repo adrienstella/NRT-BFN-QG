@@ -10,3 +10,6 @@ A program which produces near-real-time dynamic maps of ocean surface topography
 5) Share created maps : copy .nc files to remote server (here, Ifremer)
 
 Variables inclued : Sea Surface Height, Geostrophic (horizontal) velocities, Normalized relative vorticity.
+
+** add more info on how to start
+e.g. tell people to do a git clone from MASSH and remove the MASSH folder from here.
