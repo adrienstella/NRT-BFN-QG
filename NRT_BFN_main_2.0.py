@@ -65,11 +65,11 @@ for i in np.arange(0,len(datasets)):
     os.makedirs(inputs_location+today.strftime('%Y%m%d')+'/'+datasets[i], exist_ok = True)
     os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+datasets[i])
 
-    ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L3_NRT_OBSERVATIONS_008_059/', datasets[i], str(today.year), str(today.month), inputs_location)
+    ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L3_NRT_OBSERVATIONS_008_059/', datasets[i], str(today.year), str(today.month))
     os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+datasets[i])
 
     if (today.month != first_day.month): # (!) only works when the assimilation duration doesn't span over more than two months
-            ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L3_NRT_OBSERVATIONS_008_059/', datasets[i], str(first_day.year), str(first_day.month), inputs_location)
+            ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L3_NRT_OBSERVATIONS_008_059/', datasets[i], str(first_day.year), str(first_day.month))
             os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+datasets[i])
 
 os.chdir(currdir)
@@ -83,11 +83,11 @@ print('Retreiving data for dataset '+dataset_l4)
 os.makedirs(inputs_location+today.strftime('%Y%m%d')+'/'+dataset_l4, exist_ok = True)
 os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+dataset_l4)
 
-ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L4_NRT_OBSERVATIONS_008_060/', dataset_l4, str(today.year), str(today.month), inputs_location)
+ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L4_NRT_OBSERVATIONS_008_060/', dataset_l4, str(today.year), str(today.month))
 os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+dataset_l4)
 
 if (today.month != first_day.month): # (!) only works when the assimilation duration doesn't span over more than two months
-    ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L4_NRT_OBSERVATIONS_008_060/', dataset_l4, str(first_day.year), str(first_day.month), inputs_location)
+    ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L4_NRT_OBSERVATIONS_008_060/', dataset_l4, str(first_day.year), str(first_day.month))
 
 os.chdir(currdir)
 print('DUACS L4 data downloaded successfully')
@@ -204,7 +204,7 @@ from tools.vars import h2uv, h2rv
 
 for t in np.arange(len(daily_mean_ssh.time)):
     (u[t, :, :], v[t, :, :]) = h2uv(ssh = daily_mean_ssh.ssh[t, :, :], dy = dy, dx = dx, g = g, f = f)
-    xi_norm[t, :, :] = h2rv(ssh = daily_mean_ssh.ssh[t, :, :], dy = dy, dx = dx, g = g, f = f, c = c0)
+    xi_norm[t, :, :] = h2rv(ssh = daily_mean_ssh.ssh[t, :, :], dy = dy, dx = dx, g = g, f = f)
 
 daily_mean_ssh['u'] = (['time', 'lat', 'lon'],  u)
 daily_mean_ssh['v'] = (['time', 'lat', 'lon'],  v)
@@ -245,4 +245,5 @@ for d in pd.to_datetime(daily_mean_ssh.time.values):
 
 print('Files in the directory :')
 ftp.nlst()
+print('Closing connexion :')
 ftp.quit()
