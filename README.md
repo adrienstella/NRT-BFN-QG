@@ -13,3 +13,4 @@ Variables inclued : Sea Surface Height, Geostrophic (horizontal) velocities, Nor
 
 ** add more info on how to start
 e.g. tell people to do a git clone from MASSH and remove the MASSH folder from here.
++ make a notebook (quickstart/example) that shows how everything runs with the outputs etc. with explanations
