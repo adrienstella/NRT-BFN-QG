@@ -14,12 +14,12 @@ from config_2020a_BFNQG.py
 # Global libraries     
 #################################################################################################################################
  
-from datetime import datetime,timedelta,date
+from datetime import datetime,timedelta,date,time
 today = date.today().strftime('%Y%m%d')
 #today = date.fromisoformat('2023-03-21').strftime('%Y%m%d')
 
 numdays = 15
-final_date = datetime.today() # or to stop at yday : - timedelta(days=1)
+final_date = datetime.combine(date.today(), time()) # or to stop at yday : - timedelta(days=1)
 #final_date = date.fromisoformat('2023-03-21')
 init_date = final_date - timedelta(days=numdays)
  
@@ -39,7 +39,7 @@ EXP = dict(
 
     path_save = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/output/'+today+'/', # path of output files
 
-    tmp_DA_path = "./scratch/NRT_BFN_A1", # temporary data assimilation directory path,
+    tmp_DA_path = "./scratch/"+name_experiment, # temporary data assimilation directory path,
 
     init_date = init_date, # initial date (yyyy,mm,dd,hh) 
 
@@ -53,7 +53,7 @@ EXP = dict(
 
     write_obs = False, # save observation dictionary in *path_obs*
 
-    path_obs = "./scratch/NRT_BFN_A1"
+    path_obs = "./scratch/"+name_experiment
 
 )
     
