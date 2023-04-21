@@ -15,19 +15,20 @@ from config_2020a_BFNQG.py
 #################################################################################################################################
  
 from datetime import datetime,timedelta,date,time
-today = date.today().strftime('%Y%m%d')
-#today = date.fromisoformat('2023-03-21').strftime('%Y%m%d')
 
-numdays = 15
 final_date = datetime.combine(date.today(), time()) # or to stop at yday : - timedelta(days=1)
 #final_date = date.fromisoformat('2023-03-21')
+
+today = final_date.strftime('%Y%m%d')
+
+numdays = 15
 init_date = final_date - timedelta(days=numdays)
  
 #################################################################################################################################
 # EXPERIMENTAL PARAMETERS
 #################################################################################################################################
 
-name_experiment = 'NRT_BFN_A1'
+name_experiment = 'NRT_BFN_A1_swotn' 
 
 EXP = dict(
 
@@ -37,7 +38,7 @@ EXP = dict(
 
     name_exp_save = name_experiment, # name of output files
 
-    path_save = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/output/'+today+'/', # path of output files
+    path_save = './output/'+today+'/', # path of output files
 
     tmp_DA_path = "./scratch/"+name_experiment, # temporary data assimilation directory path,
 
@@ -78,9 +79,13 @@ myGrid = dict(
 
     dlat = 1/16.,                                            # meridional grid spatial step (in degree)
  
-    name_init_mask = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today+'/duacs_l4_filled.nc',
+    name_init_mask = './input/'+today+'/duacs_l4_filled.nc',
+
+    #name_init_mask = './input/Bathy_CLS_mask_30th_180_crop.nc', # another masking option
 
     name_var_mask = {'lon':'longitude','lat':'latitude','var':'adt'} # adt variable is before filling. Different variable for BCs.
+
+    #name_var_mask = {'lon':'NbLongitudes','lat':'NbLatitudes','var':'ocean_mask'} 
 
 )
 
@@ -111,7 +116,7 @@ myBC = dict(
 
     super = 'BC_EXT',
 
-    file = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today+'/duacs_l4_filled.nc',
+    file = './input/'+today+'/duacs_l4_filled.nc',
 
     name_lon = 'longitude',
 
@@ -130,13 +135,13 @@ myBC = dict(
 #################################################################################################################################
 # Observation parameters
 #################################################################################################################################
-NAME_OBS = ['ALG','C2N','H2B','J3N','S3A','S3B','S6A']
+NAME_OBS = ['ALG','C2N','H2B','J3N','S3A','S3B','S6A','SWOTN']
 
 ALG = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today+'/dataset-duacs-nrt-europe-al-phy-l3/',
+    path = './input/'+today+'/dataset-duacs-nrt-europe-al-phy-l3/',
 
     name_time = 'time',
     
@@ -148,7 +153,7 @@ ALG = dict(
 
     add_mdt = True,
 
-    path_mdt = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -160,7 +165,7 @@ C2N = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today+'/dataset-duacs-nrt-europe-c2n-phy-l3/',
+    path = './input/'+today+'/dataset-duacs-nrt-europe-c2n-phy-l3/',
 
     name_time = 'time',
     
@@ -172,7 +177,7 @@ C2N = dict(
 
     add_mdt = True,
 
-    path_mdt = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -184,7 +189,7 @@ H2B = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today+'/dataset-duacs-nrt-europe-h2b-phy-l3/',
+    path = './input/'+today+'/dataset-duacs-nrt-europe-h2b-phy-l3/',
 
     name_time = 'time',
     
@@ -196,7 +201,7 @@ H2B = dict(
 
     add_mdt = True,
 
-    path_mdt = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -208,7 +213,7 @@ J3N = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_j3n-l3-duacs_PT0.2S/',
+    path = './input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_j3n-l3-duacs_PT0.2S/',
 
     name_time = 'time',
     
@@ -220,7 +225,7 @@ J3N = dict(
 
     add_mdt = True,
 
-    path_mdt = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -232,7 +237,7 @@ S3A = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_s3a-l3-duacs_PT0.2S/',
+    path = './input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_s3a-l3-duacs_PT0.2S/',
 
     name_time = 'time',
     
@@ -244,7 +249,7 @@ S3A = dict(
 
     add_mdt = True,
 
-    path_mdt = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -256,7 +261,7 @@ S3B = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_s3b-l3-duacs_PT0.2S/',
+    path = './input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_s3b-l3-duacs_PT0.2S/',
 
     name_time = 'time',
     
@@ -268,7 +273,7 @@ S3B = dict(
 
     add_mdt = True,
 
-    path_mdt = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -280,7 +285,7 @@ S6A = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_s6a-hr-l3-duacs_PT0.2S/',
+    path = './input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_s6a-hr-l3-duacs_PT0.2S/',
 
     name_time = 'time',
     
@@ -292,7 +297,31 @@ S6A = dict(
 
     add_mdt = True,
 
-    path_mdt = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+
+    name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
+    
+    nudging_params_ssh = {'sigma':0,'K':0.7,'Tau':timedelta(days=1)},
+
+)
+
+SWOTN = dict(
+
+    super = 'OBS_SSH_NADIR',
+
+    path = './input/'+today+'/nrt_global_swonc_phy_l3_1hz/',
+
+    name_time = 'time',
+    
+    name_lon = 'longitude',
+
+    name_lat = 'latitude',
+    
+    name_var = {'SSH':'sla_unfiltered'},
+
+    add_mdt = True,
+
+    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     

@@ -28,9 +28,7 @@ Enter the NRT-BFN-QG repo and clone the MASSH repo inside it:
 git clone https://github.com/leguillf/MASSH.git
 ```
 
+Change the different paths to match yours
+Enter your usernames and passwords for the FTP servers you want to connect to.
+
 You're now good to go ! Just run NRT_BFN_main_2.0.py to start creating maps.
-
-
-
-
-*Note to self: make a notebook (quickstart/example) that shows how everything runs with the outputs etc. with explanations*

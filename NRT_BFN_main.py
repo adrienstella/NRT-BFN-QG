@@ -14,10 +14,14 @@ import xarray as xr
 import pyinterp.backends.xarray
 import pyinterp.fill
 import netCDF4
+import glob
+import re
 
 ###########################################################################################################################################
 ###  1. DOWNLOAD DATA
 ###########################################################################################################################################
+
+import secretcodes
 
 today = date.today()
 # today = date.fromisoformat('2023-03-21') # To get data from another day
@@ -40,15 +44,13 @@ datasets = [
     'cmems_obs-sl_eur_phy-ssh_nrt_s6a-hr-l3-duacs_PT0.2S',
 ]
 
-inputs_location='/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'
-
 # FTP connection to CMEMS server and data download
-os.chdir('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/')
 currdir=os.getcwd()
+inputs_location=currdir+'/input/'
 
 # Set user name and password
-username = 'username'
-password = 'password'
+username = secretcodes.cmems_username
+password = secretcodes.cmems_password
 
 # Connect to the ftp server
 ftp = FTP('nrt.cmems-du.eu',username,password)
@@ -94,6 +96,78 @@ print('DUACS L4 data downloaded successfully')
 
 ftp.quit()
 
+# Download SWOT nadir L3 data from AVISO
+
+# Set user name and password
+username = secretcodes.swot_username
+password = secretcodes.swot_password
+
+# Connect to the ftp server
+ftp = FTP('ftp-access.aviso.altimetry.fr',username,password)
+ftp.cwd('/data/Data/ALTI/DUACS_SWOT_Nadir/L3_Along_track')
+filenames = ftp.nlst()
+
+# Download SWOT nadir product
+dataset_swot_n = 'nrt_global_swonc_phy_l3_1hz'
+print('Retreiving data for dataset '+dataset_swot_n)
+
+os.makedirs(inputs_location+today.strftime('%Y%m%d')+'/'+dataset_swot_n, exist_ok = True)
+os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+dataset_swot_n)
+
+# Set the name of the file to download
+for filename in filenames:
+    print('Retreiving data for '+filename)
+
+    # Download the file
+    ftp.retrbinary("RETR "+filename, open(filename, 'wb').write)
+
+print(dataset_swot_n+' data downloaded successfully')
+ftp.quit()
+
+
+# Sort SWOT nadir files to keep only the right ones
+
+# Get all combinations of data dates and upload dates from filenames
+i=0
+all_date_combos = np.zeros((len(filenames),2))
+for filename in filenames:
+    all_date_combos[i,0] = re.findall(r'\d+', filename)[2]
+    all_date_combos[i,1] = re.findall(r'\d+', filename)[3]
+    i=i+1
+all_date_combos = all_date_combos[all_date_combos[:,0].argsort()]
+
+# Makes a list of all data dates available, regardless of upload date
+dates_data = np.zeros((0,0))
+for date in all_date_combos[:,0]:
+    if not(any(dates_data==date)):
+        dates_data = np.append(dates_data, date)
+
+# For each data date, choose the latest upload date
+i=0
+most_recent_uploads = np.zeros((len(dates_data),2))
+for date in dates_data:
+    date_i_uploads = all_date_combos[all_date_combos[:,0]==date, :]
+    most_recent_uploads[i,0] = date 
+    most_recent_uploads[i,1] = max(date_i_uploads[:,1])
+    # print('At date '+str(most_recent_uploads[i,0])+', uploads available : '+str(date_i_uploads[:,1])+', keeping : '+str(most_recent_uploads[i,1]))
+    i=i+1
+# most_recent_uploads # this contains pairs of data dates and upload dates to KEEP. all other should be deleted.
+
+keeper_names = []
+for i in np.arange(0,len(most_recent_uploads)):
+    keeper_names = np.append(keeper_names, 'nrt_global_swonc_phy_l3_1hz_'+str(int(most_recent_uploads[i,0]))+'_'+str(int(most_recent_uploads[i,1]))+'.nc')
+
+for filename in filenames:
+    if not(filename in keeper_names):
+        print('[deleting] '+filename)
+        os.remove(filename)
+    else:
+        print('[keeping] '+filename)
+
+print('[SWOT nadir input files ready]')
+os.chdir(currdir)
+
+
 ############################################################################################################################################
 ### 2. COMPUTE BOUNDARY CONDITIONS
 ############################################################################################################################################
@@ -101,7 +175,7 @@ ftp.quit()
 # Rework the DUACS dataset for optimal boundary conditions : extrapolate data to fill coasts. 
 # Then a mask is used in BFN to select only ocean and avoid awkward 0 values around coasts
 
-ds = xr.open_mfdataset('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today.strftime('%Y%m%d')+'/dataset-duacs-nrt-europe-merged-allsat-phy-l4/*.nc')
+ds = xr.open_mfdataset('./input/'+today.strftime('%Y%m%d')+'/dataset-duacs-nrt-europe-merged-allsat-phy-l4/*.nc')
 ds = ds.sel(longitude = slice(lon_min,lon_max), latitude = slice(lat_min,lat_max))
 
 longitude = ds.longitude.values
@@ -119,7 +193,7 @@ for t in np.arange(len(ds.time)):
 
 ds['adt_full'] = (['time', 'latitude', 'longitude'], adt_filled_upright)
 
-ds.to_netcdf('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today.strftime('%Y%m%d')+'/duacs_l4_filled.nc', mode = 'w')
+ds.to_netcdf('./input/'+today.strftime('%Y%m%d')+'/duacs_l4_filled.nc', mode = 'w')
 
 
 ############################################################################################################################################
@@ -127,9 +201,9 @@ ds.to_netcdf('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/input/'+today.strft
 ############################################################################################################################################
 
 # Config
-path_config = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/NRT_BFN_A1_config.py'  
+path_config = './NRT_BFN_main_config.py'  
 
-dir_massh = '/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/MASSH-A1/mapping'
+dir_massh = '/bettik/PROJECTS/pr-data-ocean/stellaa/MASSH/mapping'
 import sys
 sys.path.append(dir_massh)
 
@@ -164,7 +238,7 @@ inv.Inv(config,State,Model,dict_obs=dict_obs,Bc=Bc)
 ###########################################################################################################################################
 
 # Load the last week and take daily averages
-bfn_output = xr.open_mfdataset('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/output/'+today.strftime('%Y%m%d')+'/*.nc', concat_dim='time', combine='nested')
+bfn_output = xr.open_mfdataset('./output/'+today.strftime('%Y%m%d')+'/*.nc', concat_dim='time', combine='nested')
 bfn_output_dates = bfn_output.assign(time=pd.to_datetime(bfn_output.time.dt.date))
 last_week = bfn_output_dates.where(bfn_output_dates.time >= pd.to_datetime(today-timedelta(days=6)), drop =True)
 daily_mean_ssh = last_week.groupby("time").mean("time")
@@ -212,11 +286,11 @@ daily_mean_ssh['xi_norm'] = (['time', 'lat', 'lon'],  xi_norm)
 
 
 # Save final netcdf files 
-os.makedirs('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/maps/'+today.strftime('%Y%m%d')+'/', exist_ok = True)
+os.makedirs('./maps/'+today.strftime('%Y%m%d')+'/', exist_ok = True)
 for d in daily_mean_ssh.time.values:
     date = pd.to_datetime(d)
     ds=daily_mean_ssh.where(daily_mean_ssh.time == d, drop=True)
-    ds.to_netcdf('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/maps/'+today.strftime('%Y%m%d')+'/NRT_BFN_'+date.strftime('%Y%m%d')+'.nc', mode = 'w')
+    ds.to_netcdf('./maps/'+today.strftime('%Y%m%d')+'/NRT_BFN_'+date.strftime('%Y%m%d')+'.nc', mode = 'w')
 
 
 
@@ -229,8 +303,8 @@ os.chdir('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/')
 currdir=os.getcwd()
 
 # Set user name and password
-username = 'username'
-password = 'password'
+username = secretcodes.ifremer_username
+password = secretcodes.ifremer_password
 
 # Connect to the ftp server
 ftp = FTP('ftp.ifremer.fr',username,password)
