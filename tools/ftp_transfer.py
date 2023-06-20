@@ -129,6 +129,27 @@ def download_nadirs_cmems(currdir, today, numdays, datasets, dataset_l4):
 
     ftp.quit()
 
+def download_mdt(currdir, dataset_mdt):
+    # Set user name and password
+    username = secretcodes.cmems_username
+    password = secretcodes.cmems_password
+
+    # Connect to the ftp server
+    ftp = FTP('my.cmems-du.eu',username,password)
+
+    # Download DUACS L4 product
+    print('Downloading MDT')
+
+    os.makedirs(currdir+'/input/', exist_ok = True)
+    os.chdir(currdir+'/input/')
+
+    ftp.retrbinary("RETR "+'/Core/SEALEVEL_GLO_PHY_MDT_008_063/cnes_obs-sl_glo_phy-mdt_my_0.125deg_P20Y/'+dataset_mdt, open(dataset_mdt, 'wb').write)
+
+    os.chdir(currdir)
+    print('MDT downloaded successfully')
+
+    ftp.quit()
+
 import re
 def download_swot_nadir(currdir, today):
     # Download SWOT nadir L3 data from AVISO

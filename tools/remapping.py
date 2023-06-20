@@ -77,6 +77,7 @@ def nc_processing(today):
 
     # Save final netcdf files - this can be adapted depending on the needs of the receiver (variable names, how many files, etc.)
     os.makedirs('./maps/'+today.strftime('%Y%m%d')+'/', exist_ok = True)
+    os.makedirs('./maps/full_timeseries/', exist_ok = True)
     for d in daily_mean_ssh.time.values:
         date = to_datetime(d)
         ds=daily_mean_ssh.where(daily_mean_ssh.time == d, drop=True)
@@ -155,10 +156,11 @@ def apply_lamta(currdir, dir_lamta, today, bbox, numdays = 30, delta0 = 0.02, st
     return diags_results
 
 # Check MDT is ready
-def make_mdt(currdir, bbox):
+def make_mdt(currdir, bbox, dataset_mdt = 'mdt_hybrid_cnes_cls18_cmems2020_global.nc'):
     if(not(os.path.isfile(currdir+'/input/cnes_mdt_local.nc'))):
-        # Would be nice to have an option to actually download MDT if not initalized. could be assumed that if the local doesn't esist, the original should be downloaded. 
-        ds = xr.open_dataset(currdir+'/input/cnes_obs-sl_glo_phy-mdt_my_0.125deg_P20Y_1683119241734.nc')
+        from tools.ftp_transfer import download_mdt
+        download_mdt(currdir, dataset_mdt)
+        ds = xr.open_dataset(currdir+'/input/'+dataset_mdt)
         ds = ds.sel(longitude = slice(bbox[0],bbox[1]), latitude = slice(bbox[2],bbox[3]))
-        mdt = ds.mdt[1,:,:]
+        mdt = ds.mdt
         mdt.to_netcdf(currdir+'/input/cnes_mdt_local.nc')

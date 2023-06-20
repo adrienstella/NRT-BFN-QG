@@ -27,7 +27,7 @@ init_date = final_date - timedelta(days=numdays)
 # EXPERIMENTAL PARAMETERS
 #################################################################################################################################
 
-name_experiment = 'NRT_BFN_A1_swotn' 
+name_experiment = 'NRT_BFN_EUREC4A_test' 
 
 EXP = dict(
 
@@ -66,13 +66,13 @@ myGrid = dict(
 
     super = 'GRID_GEO',
 
-    lon_min = -140.,                                        # domain min longitude
+    lon_min = -62.,                                        # domain min longitude
 
-    lon_max = -115.,                                        # domain max longitude
+    lon_max = -52.,                                        # domain max longitude
 
-    lat_min = 30.,                                         # domain min latitude
+    lat_min = 6.,                                         # domain min latitude
 
-    lat_max = 50.,                                         # domain max latitude
+    lat_max = 17.,                                         # domain max latitude
 
     dlon = 1/8.,                                            # zonal grid spatial step (in degree)
 
