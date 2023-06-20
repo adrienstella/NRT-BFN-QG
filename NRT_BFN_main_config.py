@@ -11,17 +11,16 @@ from config_2020a_BFNQG.py
 """
 
 #################################################################################################################################
-# Global libraries     
+# General Parameters    
 #################################################################################################################################
  
 from datetime import datetime,timedelta,date,time
 
+numdays = 8
+
 final_date = datetime.combine(date.today(), time()) # or to stop at yday : - timedelta(days=1)
-#final_date = date.fromisoformat('2023-03-21')
-
+#final_date = datetime.combine(date.fromisoformat('2023-06-13'), time())
 today = final_date.strftime('%Y%m%d')
-
-numdays = 15
 init_date = final_date - timedelta(days=numdays)
  
 #################################################################################################################################
@@ -50,14 +49,14 @@ EXP = dict(
 
     saveoutput_time_step = timedelta(hours=3),  # time step at which the states are saved 
 
-    flag_plot = 0,
+    flag_plot = 1,
 
     write_obs = False, # save observation dictionary in *path_obs*
 
     path_obs = "./scratch/"+name_experiment
 
 )
-    
+
 #################################################################################################################################
 # GRID parameters
 #################################################################################################################################
@@ -67,25 +66,21 @@ myGrid = dict(
 
     super = 'GRID_GEO',
 
-    lon_min = -2.,                                        # domain min longitude
+    lon_min = -140.,                                        # domain min longitude
 
-    lon_max = 10.,                                        # domain max longitude
+    lon_max = -115.,                                        # domain max longitude
 
-    lat_min = 36.,                                         # domain min latitude
+    lat_min = 30.,                                         # domain min latitude
 
-    lat_max = 44.,                                         # domain max latitude
+    lat_max = 50.,                                         # domain max latitude
 
-    dlon = 1/16.,                                            # zonal grid spatial step (in degree)
+    dlon = 1/8.,                                            # zonal grid spatial step (in degree)
 
-    dlat = 1/16.,                                            # meridional grid spatial step (in degree)
+    dlat = 1/8.,                                            # meridional grid spatial step (in degree)
  
     name_init_mask = './input/'+today+'/duacs_l4_filled.nc',
 
-    #name_init_mask = './input/Bathy_CLS_mask_30th_180_crop.nc', # another masking option
-
     name_var_mask = {'lon':'longitude','lat':'latitude','var':'adt'} # adt variable is before filling. Different variable for BCs.
-
-    #name_var_mask = {'lon':'NbLongitudes','lat':'NbLatitudes','var':'ocean_mask'} 
 
 )
 
@@ -102,7 +97,9 @@ myMOD = dict(
 
     dtmodel = 600, # model timestep
 
-    c0 = 1.5, # phase speed of baroclinic 1st mode - calculé avec Emmanuel à partir de LR = 15km en Med.
+    c0 = 2.2, # phase speed of baroclinic 1st mode (m/s)
+
+    dist_sponge_bc = 30
 
 )
 
@@ -126,9 +123,7 @@ myBC = dict(
 
     name_var = {'SSH':'adt_full'}, # name of the boundary conditions variable
 
-    name_mod_var = {'SSH':'ssh'},
-
-    dist_sponge = 30 # Peripherical band width (km) on which the boundary conditions are applied
+    name_mod_var = {'SSH':'ssh'}
 
 )
 
@@ -141,7 +136,7 @@ ALG = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = './input/'+today+'/dataset-duacs-nrt-europe-al-phy-l3/',
+    path = './input/'+today+'/dataset-duacs-nrt-global-al-phy-l3/',
 
     name_time = 'time',
     
@@ -153,7 +148,7 @@ ALG = dict(
 
     add_mdt = True,
 
-    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cnes_mdt_local.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -165,7 +160,7 @@ C2N = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = './input/'+today+'/dataset-duacs-nrt-europe-c2n-phy-l3/',
+    path = './input/'+today+'/dataset-duacs-nrt-global-c2n-phy-l3/',
 
     name_time = 'time',
     
@@ -177,7 +172,7 @@ C2N = dict(
 
     add_mdt = True,
 
-    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cnes_mdt_local.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -189,7 +184,7 @@ H2B = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = './input/'+today+'/dataset-duacs-nrt-europe-h2b-phy-l3/',
+    path = './input/'+today+'/dataset-duacs-nrt-global-h2b-phy-l3/',
 
     name_time = 'time',
     
@@ -201,7 +196,7 @@ H2B = dict(
 
     add_mdt = True,
 
-    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cnes_mdt_local.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -213,7 +208,7 @@ J3N = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = './input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_j3n-l3-duacs_PT0.2S/',
+    path = './input/'+today+'/cmems_obs-sl_glo_phy-ssh_nrt_j3n-l3-duacs_PT1S/',
 
     name_time = 'time',
     
@@ -225,7 +220,7 @@ J3N = dict(
 
     add_mdt = True,
 
-    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cnes_mdt_local.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -237,7 +232,7 @@ S3A = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = './input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_s3a-l3-duacs_PT0.2S/',
+    path = './input/'+today+'/dataset-duacs-nrt-global-s3a-phy-l3/',
 
     name_time = 'time',
     
@@ -249,7 +244,7 @@ S3A = dict(
 
     add_mdt = True,
 
-    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cnes_mdt_local.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -261,7 +256,7 @@ S3B = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = './input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_s3b-l3-duacs_PT0.2S/',
+    path = './input/'+today+'/dataset-duacs-nrt-global-s3b-phy-l3/',
 
     name_time = 'time',
     
@@ -273,7 +268,7 @@ S3B = dict(
 
     add_mdt = True,
 
-    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cnes_mdt_local.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -285,7 +280,7 @@ S6A = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = './input/'+today+'/cmems_obs-sl_eur_phy-ssh_nrt_s6a-hr-l3-duacs_PT0.2S/',
+    path = './input/'+today+'/cmems_obs-sl_glo_phy-ssh_nrt_s6a-hr-l3-duacs_PT1S/',
 
     name_time = 'time',
     
@@ -297,7 +292,7 @@ S6A = dict(
 
     add_mdt = True,
 
-    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cnes_mdt_local.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
@@ -321,11 +316,11 @@ SWOTN = dict(
 
     add_mdt = True,
 
-    path_mdt = './input/cmems_obs-sl_med_phy-mdt_my_l4-0.0417deg_P20Y_1679318915395.nc',
+    path_mdt = './input/cnes_mdt_local.nc',
 
     name_var_mdt = {'lon':'longitude','lat':'latitude','mdt':'mdt'},
     
-    nudging_params_ssh = {'sigma':0,'K':0.7,'Tau':timedelta(days=1)},
+    nudging_params_ssh = {'sigma':0,'K':0.7,'Tau':timedelta(hours=10)},
 
 )
 

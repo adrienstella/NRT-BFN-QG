@@ -1,214 +1,92 @@
-# This script is made to be automatically ran every day at 6am as an OAR job by submit_NRT_BFN.ksh.
-# It downloads the latest data based on today's date from the CMEMS FTP server, into the inputs folder,
-# then runs the BFN-QG algorithm in MASSH to assimilate this data and output ssh maps for every 3 hours.
+# This script is made to be automatically ran every day to produce ocean maps in near real-time
+# It downloads the latest data based on today's date from the CMEMS FTP server into the inputs folder,
+# then runs the BFN-QG algorithm in MASSH to assimilate this data into a dynamical model and create SSH maps for every 3 hours.
 # Finally, the program averages these values for each day and derives the geostrophic velocities and 
-# normalized relative vorticity from the daily ssh, which it saves as .nc files that are also sent to 
-# Ifremer's FTP server. 
+# normalized relative vorticity from the daily SSH, which it saves as .nc files.
+# Lagragian diagnostics are run using the LOCEAN Lamta algorithm.
+# Finally, everything is sent to external FTP servers for access by end users. 
 
-from ftplib import FTP
-import numpy as np
 import os
-import pandas as pd
-from datetime import datetime, timedelta, date
-import xarray as xr
-import pyinterp.backends.xarray
-import pyinterp.fill
-import netCDF4
-import glob
-import re
-
-###########################################################################################################################################
-###  1. DOWNLOAD DATA
-###########################################################################################################################################
-
-import secretcodes
-
-today = date.today()
-# today = date.fromisoformat('2023-03-21') # To get data from another day
-numdays = 15
-
-# Define spatial domain (!) should be better coded to use it from config.
-lon_min = -2                              
-lon_max = 10                                
-lat_min = 36                                  
-lat_max = 44                                    
-
-# What data to download and where to put it
-datasets = [
-    'dataset-duacs-nrt-europe-al-phy-l3', 
-    'dataset-duacs-nrt-europe-c2n-phy-l3', 
-    'dataset-duacs-nrt-europe-h2b-phy-l3',
-    'cmems_obs-sl_eur_phy-ssh_nrt_j3n-l3-duacs_PT0.2S',
-    'cmems_obs-sl_eur_phy-ssh_nrt_s3a-l3-duacs_PT0.2S',
-    'cmems_obs-sl_eur_phy-ssh_nrt_s3b-l3-duacs_PT0.2S',
-    'cmems_obs-sl_eur_phy-ssh_nrt_s6a-hr-l3-duacs_PT0.2S',
-]
-
-# FTP connection to CMEMS server and data download
-currdir=os.getcwd()
-inputs_location=currdir+'/input/'
-
-# Set user name and password
-username = secretcodes.cmems_username
-password = secretcodes.cmems_password
-
-# Connect to the ftp server
-ftp = FTP('nrt.cmems-du.eu',username,password)
-
-# Choose dates to download
-first_day = today - timedelta(days=numdays)
-dates = pd.date_range(end = today, periods = numdays).to_pydatetime().tolist()
-
-from tools.ftp_transfer import ftp_cmems_download_month
-
-# Download all L3 products
-for i in np.arange(0,len(datasets)):
-
-    os.makedirs(inputs_location+today.strftime('%Y%m%d')+'/'+datasets[i], exist_ok = True)
-    os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+datasets[i])
-
-    ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L3_NRT_OBSERVATIONS_008_059/', datasets[i], str(today.year), str(today.month))
-    os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+datasets[i])
-
-    if (today.month != first_day.month): # (!) only works when the assimilation duration doesn't span over more than two months
-            ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L3_NRT_OBSERVATIONS_008_059/', datasets[i], str(first_day.year), str(first_day.month))
-            os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+datasets[i])
-
-os.chdir(currdir)
-print('Obs data downloaded successfully')
+from datetime import timedelta
+import sys
 
 
-# Download DUACS L4 product
-dataset_l4 = 'dataset-duacs-nrt-europe-merged-allsat-phy-l4'
-print('Retreiving data for dataset '+dataset_l4)
+########################### Parameters to adjust ##########################################################################################
 
-os.makedirs(inputs_location+today.strftime('%Y%m%d')+'/'+dataset_l4, exist_ok = True)
-os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+dataset_l4)
-
-ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L4_NRT_OBSERVATIONS_008_060/', dataset_l4, str(today.year), str(today.month))
-os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+dataset_l4)
-
-if (today.month != first_day.month): # (!) only works when the assimilation duration doesn't span over more than two months
-    ftp_cmems_download_month(ftp, '/Core/SEALEVEL_EUR_PHY_L4_NRT_OBSERVATIONS_008_060/', dataset_l4, str(first_day.year), str(first_day.month))
-
-os.chdir(currdir)
-print('DUACS L4 data downloaded successfully')
-
-ftp.quit()
-
-# Download SWOT nadir L3 data from AVISO
-
-# Set user name and password
-username = secretcodes.swot_username
-password = secretcodes.swot_password
-
-# Connect to the ftp server
-ftp = FTP('ftp-access.aviso.altimetry.fr',username,password)
-ftp.cwd('/data/Data/ALTI/DUACS_SWOT_Nadir/L3_Along_track')
-filenames = ftp.nlst()
-
-# Download SWOT nadir product
-dataset_swot_n = 'nrt_global_swonc_phy_l3_1hz'
-print('Retreiving data for dataset '+dataset_swot_n)
-
-os.makedirs(inputs_location+today.strftime('%Y%m%d')+'/'+dataset_swot_n, exist_ok = True)
-os.chdir(inputs_location+today.strftime('%Y%m%d')+'/'+dataset_swot_n)
-
-# Set the name of the file to download
-for filename in filenames:
-    print('Retreiving data for '+filename)
-
-    # Download the file
-    ftp.retrbinary("RETR "+filename, open(filename, 'wb').write)
-
-print(dataset_swot_n+' data downloaded successfully')
-ftp.quit()
-
-
-# Sort SWOT nadir files to keep only the right ones
-
-# Get all combinations of data dates and upload dates from filenames
-i=0
-all_date_combos = np.zeros((len(filenames),2))
-for filename in filenames:
-    all_date_combos[i,0] = re.findall(r'\d+', filename)[2]
-    all_date_combos[i,1] = re.findall(r'\d+', filename)[3]
-    i=i+1
-all_date_combos = all_date_combos[all_date_combos[:,0].argsort()]
-
-# Makes a list of all data dates available, regardless of upload date
-dates_data = np.zeros((0,0))
-for date in all_date_combos[:,0]:
-    if not(any(dates_data==date)):
-        dates_data = np.append(dates_data, date)
-
-# For each data date, choose the latest upload date
-i=0
-most_recent_uploads = np.zeros((len(dates_data),2))
-for date in dates_data:
-    date_i_uploads = all_date_combos[all_date_combos[:,0]==date, :]
-    most_recent_uploads[i,0] = date 
-    most_recent_uploads[i,1] = max(date_i_uploads[:,1])
-    # print('At date '+str(most_recent_uploads[i,0])+', uploads available : '+str(date_i_uploads[:,1])+', keeping : '+str(most_recent_uploads[i,1]))
-    i=i+1
-# most_recent_uploads # this contains pairs of data dates and upload dates to KEEP. all other should be deleted.
-
-keeper_names = []
-for i in np.arange(0,len(most_recent_uploads)):
-    keeper_names = np.append(keeper_names, 'nrt_global_swonc_phy_l3_1hz_'+str(int(most_recent_uploads[i,0]))+'_'+str(int(most_recent_uploads[i,1]))+'.nc')
-
-for filename in filenames:
-    if not(filename in keeper_names):
-        print('[deleting] '+filename)
-        os.remove(filename)
-    else:
-        print('[keeping] '+filename)
-
-print('[SWOT nadir input files ready]')
-os.chdir(currdir)
-
-
-############################################################################################################################################
-### 2. COMPUTE BOUNDARY CONDITIONS
-############################################################################################################################################
-
-# Rework the DUACS dataset for optimal boundary conditions : extrapolate data to fill coasts. 
-# Then a mask is used in BFN to select only ocean and avoid awkward 0 values around coasts
-
-ds = xr.open_mfdataset('./input/'+today.strftime('%Y%m%d')+'/dataset-duacs-nrt-europe-merged-allsat-phy-l4/*.nc')
-ds = ds.sel(longitude = slice(lon_min,lon_max), latitude = slice(lat_min,lat_max))
-
-longitude = ds.longitude.values
-latitude = ds.latitude.values
-
-x_axis = pyinterp.Axis(longitude)
-y_axis = pyinterp.Axis(latitude)
-
-adt_filled = np.zeros((len(ds.time), len(longitude), len(latitude)))
-adt_filled_upright = np.zeros((len(ds.time), len(latitude), len(longitude)))
-
-for t in np.arange(len(ds.time)):
-    has_converged, adt_filled[t] = pyinterp.fill.gauss_seidel(pyinterp.Grid2D(x_axis, y_axis, ds.adt[t].values.T)) # values are transposed you have to T them back
-    adt_filled_upright[t] = adt_filled[t].T
-
-ds['adt_full'] = (['time', 'latitude', 'longitude'], adt_filled_upright)
-
-ds.to_netcdf('./input/'+today.strftime('%Y%m%d')+'/duacs_l4_filled.nc', mode = 'w')
-
-
-############################################################################################################################################
-### 3. RUN DATA ASSIMILATION WITH BFN-QG
-############################################################################################################################################
-
-# Config
-path_config = './NRT_BFN_main_config.py'  
+destination = None # Available options : 'ifremer',
+make_lagrangian_diags = True # True or False
 
 dir_massh = '/bettik/PROJECTS/pr-data-ocean/stellaa/MASSH/mapping'
-import sys
+path_config = './NRT_BFN_main_config.py' 
+
+
+###########################################################################################################################################
+###  0. INITIALIZATION
+###########################################################################################################################################
+
 sys.path.append(dir_massh)
+currdir=os.getcwd()
 
 from src import exp
 config = exp.Exp(path_config)
+today = config.EXP.final_date
+numdays = int((today-config.EXP.init_date)/timedelta(days = 1))
+
+lon_min = config.GRID.lon_min                            
+lon_max = config.GRID.lon_max                               
+lat_min = config.GRID.lat_min                                 
+lat_max = config.GRID.lat_max
+bbox = [lon_min, lon_max, lat_min, lat_max]   
+
+from tools.plot_tools import where_is_this
+where_is_this(bbox, 20)
+
+
+###########################################################################################################################################
+###  1. DATA DOWNLOAD
+###########################################################################################################################################
+
+from tools.ftp_transfer import download_nadirs_cmems, download_swot_nadir
+from tools.remapping import make_mdt
+
+# What datasets to download
+datasets = [
+    'dataset-duacs-nrt-global-al-phy-l3', 
+    'dataset-duacs-nrt-global-c2n-phy-l3', 
+    'dataset-duacs-nrt-global-h2b-phy-l3',
+    'dataset-duacs-nrt-global-s3a-phy-l3',
+    'dataset-duacs-nrt-global-s3b-phy-l3',
+    'cmems_obs-sl_glo_phy-ssh_nrt_j3n-l3-duacs_PT1S',
+    'cmems_obs-sl_glo_phy-ssh_nrt_s6a-hr-l3-duacs_PT1S',
+]
+
+dataset_l4 = 'dataset-duacs-nrt-global-merged-allsat-phy-l4'
+
+# FTP connection to CMEMS server and data download
+download_nadirs_cmems(currdir, today, numdays, datasets, dataset_l4)
+download_swot_nadir(currdir, today)
+
+# If needed, creates appropriate mdt file (mdt has to be downloaded already, though)
+make_mdt(currdir,bbox)
+
+
+############################################################################################################################################
+### 2. BOUNDARY CONDITIONS
+############################################################################################################################################
+
+from tools.remapping import compute_filled_map
+
+# Rework DUACS dataset for optimal boundary conditions : extrapolate data to fill coasts. 
+# Then a mask is used in BFN to select only ocean and avoid awkward 0 values around coasts
+BC_data_path = currdir+'/input/'+today.strftime('%Y%m%d')+'/dataset-duacs-nrt-global-merged-allsat-phy-l4/*.nc'
+save_new_BC_to = currdir+'/input/'+today.strftime('%Y%m%d')+'/duacs_l4_filled.nc'
+
+compute_filled_map(BC_data_path, save_new_BC_to, bbox)
+
+
+############################################################################################################################################
+### 3. DATA ASSIMILATION WITH BFN-QG
+############################################################################################################################################
 
 # State
 from src import state as state
@@ -231,93 +109,29 @@ from src import inv as inv
 inv.Inv(config,State,Model,dict_obs=dict_obs,Bc=Bc)
 
 
+###########################################################################################################################################
+### 4. RESULTS PROCESSING
+###########################################################################################################################################
+
+from tools.remapping import nc_processing
+nc_processing(today=today)
+
+
+#######################################################################################
+### 5. LAMTA LAGRANGIAN DIAGNOSTICS
+#######################################################################################
+
+if make_lagrangian_diags == True:
+    dir_lamta = '/bettik/PROJECTS/pr-data-ocean/stellaa/lamtaLR'
+    from tools.remapping import apply_lamta
+    lamta_diags_results = apply_lamta(currdir, dir_lamta, today, bbox, numdays=3, bathylvl =-1500)
 
 
 ###########################################################################################################################################
-### 4. PROCESS RESULTS
+### 6. MAPS UPLOAD
 ###########################################################################################################################################
+# Here, choose the right function to send to the right place. 
 
-# Load the last week and take daily averages
-bfn_output = xr.open_mfdataset('./output/'+today.strftime('%Y%m%d')+'/*.nc', concat_dim='time', combine='nested')
-bfn_output_dates = bfn_output.assign(time=pd.to_datetime(bfn_output.time.dt.date))
-last_week = bfn_output_dates.where(bfn_output_dates.time >= pd.to_datetime(today-timedelta(days=6)), drop =True)
-daily_mean_ssh = last_week.groupby("time").mean("time")
-
-# A few physical parameters for computations
-g=9.81 # m/s2
-c0=1.5, # phase speed of baroclinic 1st mode - calculé avec Emmanuel à partir de LR = 15km en Med.
-earth_rad=6.371e6 # 6371km
-earth_w=2*np.pi/86400 # rad/s
-
-# Create the dy, dx and f grids based on physical parameters
-lon=daily_mean_ssh.lon.values
-lat=daily_mean_ssh.lat.values
-x, y = np.meshgrid(lon, lat)
-
-dy = np.ones(y.shape)
-dx = np.ones(x.shape)
-
-dy[1:-1,:]=earth_rad*2*np.pi/360*(y[1:-1,:]-y[0:-2,:])
-dx[:,1:-1]=earth_rad*2*np.pi/360*(x[:,1:-1]-x[:,0:-2])*np.cos(((y[:,1:-1]+y[:,0:-2])/2)*np.pi/180)
-
-# Neumann condition at boundaries
-dy[0,:]=dy[1,:]
-dy[-1,:]=dy[-2,:]
-dx[:,0]=dx[:,1]
-dx[:,-1]=dx[:,-2]
-
-f=2*earth_w*np.sin(y*np.pi/180)
-
-
-# U, V & PV computation
-u=np.zeros((len(daily_mean_ssh.time), len(lat), len(lon)))
-v=np.zeros((len(daily_mean_ssh.time), len(lat), len(lon)))
-xi_norm=np.zeros((len(daily_mean_ssh.time), len(lat), len(lon)))
-
-from tools.vars import h2uv, h2rv
-
-for t in np.arange(len(daily_mean_ssh.time)):
-    (u[t, :, :], v[t, :, :]) = h2uv(ssh = daily_mean_ssh.ssh[t, :, :], dy = dy, dx = dx, g = g, f = f)
-    xi_norm[t, :, :] = h2rv(ssh = daily_mean_ssh.ssh[t, :, :], dy = dy, dx = dx, g = g, f = f)
-
-daily_mean_ssh['u'] = (['time', 'lat', 'lon'],  u)
-daily_mean_ssh['v'] = (['time', 'lat', 'lon'],  v)
-daily_mean_ssh['xi_norm'] = (['time', 'lat', 'lon'],  xi_norm)
-
-
-# Save final netcdf files 
-os.makedirs('./maps/'+today.strftime('%Y%m%d')+'/', exist_ok = True)
-for d in daily_mean_ssh.time.values:
-    date = pd.to_datetime(d)
-    ds=daily_mean_ssh.where(daily_mean_ssh.time == d, drop=True)
-    ds.to_netcdf('./maps/'+today.strftime('%Y%m%d')+'/NRT_BFN_'+date.strftime('%Y%m%d')+'.nc', mode = 'w')
-
-
-
-
-###########################################################################################################################################
-### 5. UPLOAD MAPS
-###########################################################################################################################################
-
-os.chdir('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/')
-currdir=os.getcwd()
-
-# Set user name and password
-username = secretcodes.ifremer_username
-password = secretcodes.ifremer_password
-
-# Connect to the ftp server
-ftp = FTP('ftp.ifremer.fr',username,password)
-ftp.cwd('MEDSSH_BFN')
-
-ftp.mkd(today.strftime('%Y%m%d'))
-ftp.cwd(today.strftime('%Y%m%d'))
-
-# put the file in the directory on ftp
-for d in pd.to_datetime(daily_mean_ssh.time.values):
-    ftp.storbinary('STOR BFN_CSWOT_'+d.strftime('%Y%m%d')+'.nc', open('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT_BFN/maps/'+today.strftime('%Y%m%d')+'/NRT_BFN_'+d.strftime('%Y%m%d')+'.nc', 'rb'))
-
-print('Files in the directory :')
-ftp.nlst()
-print('Closing connexion :')
-ftp.quit()
+if destination == 'ifremer':
+    from tools.ftp_transfer import ftp_to_ifremer
+    ftp_to_ifremer(today, currdir)
