@@ -14,10 +14,10 @@ import sys
 ########################### Parameters to adjust ##########################################################################################
 
 destination = None # Available options : 'ifremer',
-make_lagrangian_diags = True # True or False
+make_lagrangian_diags = False # True or False
 
 dir_massh = '/bettik/PROJECTS/pr-data-ocean/stellaa/MASSH/mapping'
-path_config = './NRT_BFN_main_config.py' 
+path_config = './config_MED_REANALYSES_CSWOT.py' 
 
 
 ###########################################################################################################################################
@@ -29,6 +29,7 @@ currdir=os.getcwd()
 
 from src import exp
 config = exp.Exp(path_config)
+name_experiment = config.EXP.name_experiment
 today = config.EXP.final_date
 numdays = int((today-config.EXP.init_date)/timedelta(days = 1))
 
@@ -62,12 +63,12 @@ datasets = [
 
 dataset_l4 = 'dataset-duacs-nrt-global-merged-allsat-phy-l4'
 
-# FTP connection to CMEMS server and data download
-download_nadirs_cmems(currdir, today, numdays, datasets, dataset_l4)
-download_swot_nadir(currdir, today)
+# FTP connection to CMEMS server and observational data download
+download_nadirs_cmems(name_experiment, currdir, today, numdays, datasets, dataset_l4)
+download_swot_nadir(name_experiment, currdir, today)
 
-# If needed, creates appropriate mdt file (mdt has to be downloaded already, though)
-make_mdt(currdir,bbox)
+# If needed, download and properly formats mdt file
+make_mdt(name_experiment, currdir,bbox)
 
 
 ############################################################################################################################################
@@ -77,15 +78,15 @@ make_mdt(currdir,bbox)
 from tools.remapping import compute_filled_map
 
 # Rework DUACS dataset for optimal boundary conditions : extrapolate data to fill coasts. 
-# Then a mask is used in BFN to select only ocean and avoid awkward 0 values around coasts
-BC_data_path = currdir+'/input/'+today.strftime('%Y%m%d')+'/dataset-duacs-nrt-global-merged-allsat-phy-l4/*.nc'
-save_new_BC_to = currdir+'/input/'+today.strftime('%Y%m%d')+'/duacs_l4_filled.nc'
+# Then a mask is used in MASSH to select only ocean and avoid awkward 0 values around coasts
+BC_data_path = currdir+'/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/dataset-duacs-nrt-global-merged-allsat-phy-l4/*.nc'
+save_new_BC_to = currdir+'/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/duacs_l4_filled.nc'
 
 compute_filled_map(BC_data_path, save_new_BC_to, bbox)
 
 
 ############################################################################################################################################
-### 3. DATA ASSIMILATION WITH BFN-QG
+### 3. DATA ASSIMILATION WITH MASSH (BFN-QG)
 ############################################################################################################################################
 
 # State
@@ -114,7 +115,7 @@ inv.Inv(config,State,Model,dict_obs=dict_obs,Bc=Bc)
 ###########################################################################################################################################
 
 from tools.remapping import nc_processing
-nc_processing(today=today)
+nc_processing(name_experiment, today=today)
 
 
 #######################################################################################
@@ -124,7 +125,7 @@ nc_processing(today=today)
 if make_lagrangian_diags == True:
     dir_lamta = '/bettik/PROJECTS/pr-data-ocean/stellaa/lamtaLR'
     from tools.remapping import apply_lamta
-    lamta_diags_results = apply_lamta(currdir, dir_lamta, today, bbox, numdays=3, bathylvl =-1500)
+    lamta_diags_results = apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays=30, bathylvl =-500)
 
 
 ###########################################################################################################################################
@@ -134,4 +135,4 @@ if make_lagrangian_diags == True:
 
 if destination == 'ifremer':
     from tools.ftp_transfer import ftp_to_ifremer
-    ftp_to_ifremer(today, currdir)
+    ftp_to_ifremer(name_experiment, today, currdir)

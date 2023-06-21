@@ -64,7 +64,7 @@ def place_files(ftp, path):
 
 import secretcodes
 from ftplib import FTP
-def ftp_to_ifremer(today, currdir):
+def ftp_to_ifremer(name_experiment, today, currdir):
 
     # Set user name and password
     username = secretcodes.ifremer_username
@@ -77,7 +77,7 @@ def ftp_to_ifremer(today, currdir):
     ftp.mkd(today.strftime('%Y%m%d'))
     ftp.cwd(today.strftime('%Y%m%d'))
 
-    repo_to_upload = currdir+'/maps/'+today.strftime('%Y%m%d')+'/'
+    repo_to_upload = currdir+'/maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/'
     place_files(ftp, repo_to_upload)
 
     print('Closing connexion :')
@@ -85,7 +85,7 @@ def ftp_to_ifremer(today, currdir):
 
 import numpy as np
 from datetime import timedelta
-def download_nadirs_cmems(currdir, today, numdays, datasets, dataset_l4):
+def download_nadirs_cmems(name_experiment, currdir, today, numdays, datasets, dataset_l4):
     # Set user name and password
     username = secretcodes.cmems_username
     password = secretcodes.cmems_password
@@ -99,15 +99,21 @@ def download_nadirs_cmems(currdir, today, numdays, datasets, dataset_l4):
 
     for i in np.arange(0,len(datasets)):
 
-        os.makedirs(currdir+'/input/'+today.strftime('%Y%m%d')+'/'+datasets[i], exist_ok = True)
-        os.chdir(currdir+'/input/'+today.strftime('%Y%m%d')+'/'+datasets[i])
+        os.makedirs(currdir+'/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/'+datasets[i], exist_ok = True)
+        os.chdir(currdir+'/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/'+datasets[i])
 
-        ftp_cmems_download_month(ftp, '/Core/SEALEVEL_GLO_PHY_L3_NRT_OBSERVATIONS_008_044/', datasets[i], str(today.year), str(today.month))
-        os.chdir(currdir+'/input/'+today.strftime('%Y%m%d')+'/'+datasets[i])
-
-        if (today.month != first_day.month): # (!) only works when the assimilation duration doesn't span over more than two months
-                ftp_cmems_download_month(ftp, '/Core/SEALEVEL_GLO_PHY_L3_NRT_OBSERVATIONS_008_044/', datasets[i], str(first_day.year), str(first_day.month))
-                os.chdir(currdir+'/input/'+today.strftime('%Y%m%d')+'/'+datasets[i])
+        # go through each month folder in case obs span over several months
+        m=0
+        month = today.month
+        year = today.year
+        while ((month != first_day.month) | (year != first_day.year)):
+            month = (today.month-m)%12
+            if month == 0:
+                month = 12
+                year = year-1
+            ftp_cmems_download_month(ftp, '/Core/SEALEVEL_GLO_PHY_L3_NRT_OBSERVATIONS_008_044/', datasets[i], str(year), str(month))
+            os.chdir(currdir+'/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/'+datasets[i])
+            m += 1
 
     os.chdir(currdir)
     print('Obs data downloaded successfully')
@@ -115,21 +121,27 @@ def download_nadirs_cmems(currdir, today, numdays, datasets, dataset_l4):
     # Download DUACS L4 product
     print('Retreiving data for dataset '+dataset_l4)
 
-    os.makedirs(currdir+'/input/'+today.strftime('%Y%m%d')+'/'+dataset_l4, exist_ok = True)
-    os.chdir(currdir+'/input/'+today.strftime('%Y%m%d')+'/'+dataset_l4)
-
-    ftp_cmems_download_month(ftp, '/Core/SEALEVEL_GLO_PHY_L4_NRT_OBSERVATIONS_008_046/', dataset_l4, str(today.year), str(today.month))
-    os.chdir(currdir+'/input/'+today.strftime('%Y%m%d')+'/'+dataset_l4)
-
-    if (today.month != first_day.month): # (!) only works when the assimilation duration doesn't span over more than two months
-        ftp_cmems_download_month(ftp, '/Core/SEALEVEL_GLO_PHY_L4_NRT_OBSERVATIONS_008_046/', dataset_l4, str(first_day.year), str(first_day.month))
+    os.makedirs(currdir+'/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/'+dataset_l4, exist_ok = True)
+    os.chdir(currdir+'/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/'+dataset_l4)
+    
+    m=0
+    month = today.month
+    year = today.year
+    while ((month != first_day.month) | (year != first_day.year)):
+        month = (today.month-m)%12
+        if month == 0:
+            month = 12
+            year = year-1
+        ftp_cmems_download_month(ftp, '/Core/SEALEVEL_GLO_PHY_L4_NRT_OBSERVATIONS_008_046/', dataset_l4, str(year), str(month))
+        os.chdir(currdir+'/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/'+dataset_l4)
+        m += 1
 
     os.chdir(currdir)
     print('DUACS L4 data downloaded successfully')
 
     ftp.quit()
 
-def download_mdt(currdir, dataset_mdt):
+def download_mdt(name_experiment, currdir, dataset_mdt):
     # Set user name and password
     username = secretcodes.cmems_username
     password = secretcodes.cmems_password
@@ -140,8 +152,8 @@ def download_mdt(currdir, dataset_mdt):
     # Download DUACS L4 product
     print('Downloading MDT')
 
-    os.makedirs(currdir+'/input/', exist_ok = True)
-    os.chdir(currdir+'/input/')
+    os.makedirs(currdir+'/input_'+name_experiment+'/', exist_ok = True)
+    os.chdir(currdir+'/input_'+name_experiment+'/')
 
     ftp.retrbinary("RETR "+'/Core/SEALEVEL_GLO_PHY_MDT_008_063/cnes_obs-sl_glo_phy-mdt_my_0.125deg_P20Y/'+dataset_mdt, open(dataset_mdt, 'wb').write)
 
@@ -151,7 +163,7 @@ def download_mdt(currdir, dataset_mdt):
     ftp.quit()
 
 import re
-def download_swot_nadir(currdir, today):
+def download_swot_nadir(name_experiment, currdir, today):
     # Download SWOT nadir L3 data from AVISO
     # Set user name and password
     username = secretcodes.swot_username
@@ -166,8 +178,8 @@ def download_swot_nadir(currdir, today):
     dataset_swot_n = 'nrt_global_swonc_phy_l3_1hz'
     print('Retreiving data for dataset '+dataset_swot_n)
 
-    os.makedirs(currdir+'/input/'+today.strftime('%Y%m%d')+'/'+dataset_swot_n, exist_ok = True)
-    os.chdir(currdir+'/input/'+today.strftime('%Y%m%d')+'/'+dataset_swot_n)
+    os.makedirs(currdir+'/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/'+dataset_swot_n, exist_ok = True)
+    os.chdir(currdir+'/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/'+dataset_swot_n)
 
     # Set the name of the file to download
     for filename in filenames:
