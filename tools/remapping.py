@@ -28,7 +28,7 @@ def compute_filled_map(BC_data_path, save_to, bbox):
     ds.to_netcdf(save_to, mode = 'w')
 
 
-def nc_processing(today):
+def nc_processing(name_experiment, today):
 
     # A few physical parameters for computations
     g=9.81 # m/s2
@@ -36,7 +36,7 @@ def nc_processing(today):
     earth_w=2*np.pi/86400 # rad/s
 
     # Load the last week and take daily averages
-    bfn_output = xr.open_mfdataset('./output/'+today.strftime('%Y%m%d')+'/*.nc', concat_dim='time', combine='nested')
+    bfn_output = xr.open_mfdataset('./output_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/*.nc', concat_dim='time', combine='nested')
     bfn_output_dates = bfn_output.assign(time=to_datetime(bfn_output.time.dt.date))
     last_week = bfn_output_dates.where(bfn_output_dates.time >= to_datetime(today-timedelta(days=6)), drop =True)
     daily_mean_ssh = last_week.groupby("time").mean("time")
@@ -76,20 +76,20 @@ def nc_processing(today):
     daily_mean_ssh['xi_norm'] = (['time', 'lat', 'lon'],  xi_norm)
 
     # Save final netcdf files - this can be adapted depending on the needs of the receiver (variable names, how many files, etc.)
-    os.makedirs('./maps/'+today.strftime('%Y%m%d')+'/', exist_ok = True)
-    os.makedirs('./maps/full_timeseries/', exist_ok = True)
+    os.makedirs('./maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/', exist_ok = True)
+    os.makedirs('./maps_'+name_experiment+'/full_timeseries/', exist_ok = True)
     for d in daily_mean_ssh.time.values:
         date = to_datetime(d)
         ds=daily_mean_ssh.where(daily_mean_ssh.time == d, drop=True)
-        ds.to_netcdf('./maps/'+today.strftime('%Y%m%d')+'/NRT_BFN_'+date.strftime('%Y%m%d')+'.nc', mode = 'w') # Store in daily folder
+        ds.to_netcdf('./maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/NRT_BFN_'+date.strftime('%Y%m%d')+'.nc', mode = 'w') # Store in daily folder
         ds_renamed = ds.rename({'lon': 'longitude','lat': 'latitude', 'u': 'ugos', 'v': 'vgos'})
-        ds_renamed.to_netcdf('./maps/full_timeseries/BFN_lamta_'+date.strftime('%Y%m%d')+'.nc', mode = 'w') # Store in global product for diagnostics
+        ds_renamed.to_netcdf('./maps_'+name_experiment+'/full_timeseries/BFN_lamta_'+date.strftime('%Y%m%d')+'.nc', mode = 'w') # Store in global product for diagnostics
 
 
 import sys
 from datetime import date
 import matplotlib.pyplot as plt
-def apply_lamta(currdir, dir_lamta, today, bbox, numdays = 30, delta0 = 0.02, step = 4, bathylvl = -500):
+def apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays = 30, delta0 = 0.02, step = 4, bathylvl = -500):
     
     sys.path.append(dir_lamta)
 
@@ -107,12 +107,12 @@ def apply_lamta(currdir, dir_lamta, today, bbox, numdays = 30, delta0 = 0.02, st
     os.chdir(currdir)
 
     # Create .nc files with the right names for Lamta
-    bfn_output = xr.open_mfdataset(currdir+'/maps/'+today.strftime('%Y%m%d')+'/NRT_BFN_2*.nc', concat_dim='time', combine='nested')
+    bfn_output = xr.open_mfdataset(currdir+'/maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/NRT_BFN_2*.nc', concat_dim='time', combine='nested')
 
     # Load field from renamed BFN data in "field"
     first_date = (date.fromisoformat(dayv) - timedelta(days=numdays+3))
     all_days = [(first_date + timedelta(days=x)).strftime('%Y%m%d') for x in range(numdays+4)] # (!) need more dates than numday. e.g. 10 dates for numday = 7
-    data_paths = [currdir+'/maps/full_timeseries/BFN_lamta_'+(first_date + timedelta(days=x)).strftime('%Y%m%d')+'.nc' for x in range(numdays+4)]
+    data_paths = [currdir+'/maps_'+name_experiment+'/full_timeseries/BFN_lamta_'+(first_date + timedelta(days=x)).strftime('%Y%m%d')+'.nc' for x in range(numdays+4)]
     field = load_from_path(data_paths,all_days,unit='deg/d')
 
 
@@ -144,23 +144,23 @@ def apply_lamta(currdir, dir_lamta, today, bbox, numdays = 30, delta0 = 0.02, st
     )
 
     # Save results of lagragian diagnostics
-    os.makedirs(currdir+'/maps/'+today.strftime('%Y%m%d')+'/Lamta/', exist_ok = True)
+    os.makedirs(currdir+'/maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/Lamta/', exist_ok = True)
     diags_results.to_netcdf(currdir+'/maps/'+today.strftime('%Y%m%d')+'/Lamta/NRT_BFN_lamta_diags'+today.strftime('%Y%m%d')+'.nc', mode = 'w')
 
     # Make and save Lagrangian diagnostics plots
     fig = show_ssh_ug_xinorm(bfn_output,bbox,np.datetime64(dayv),'BFN output maps')
-    fig.savefig(currdir+'/maps/'+today.strftime('%Y%m%d')+'/Lamta/'+today.strftime('%Y%m%d')+'_BFN_out.png',bbox_inches='tight')
+    fig.savefig(currdir+'/maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/Lamta/'+today.strftime('%Y%m%d')+'_BFN_out.png',bbox_inches='tight')
     plt.show
 
     plot_diags_no_sst(diags_results,bbox,today,bathylvl,save_folder=currdir+'/maps/'+today.strftime('%Y%m%d')+'/Lamta/')
     return diags_results
 
 # Check MDT is ready
-def make_mdt(currdir, bbox, dataset_mdt = 'mdt_hybrid_cnes_cls18_cmems2020_global.nc'):
-    if(not(os.path.isfile(currdir+'/input/cnes_mdt_local.nc'))):
+def make_mdt(name_experiment, currdir, bbox, dataset_mdt = 'mdt_hybrid_cnes_cls18_cmems2020_global.nc'):
+    if(not(os.path.isfile(currdir+'/input_'+name_experiment+'/cnes_mdt_local.nc'))):
         from tools.ftp_transfer import download_mdt
-        download_mdt(currdir, dataset_mdt)
-        ds = xr.open_dataset(currdir+'/input/'+dataset_mdt)
+        download_mdt(name_experiment, currdir, dataset_mdt)
+        ds = xr.open_dataset(currdir+'/input_'+name_experiment+'/'+dataset_mdt)
         ds = ds.sel(longitude = slice(bbox[0],bbox[1]), latitude = slice(bbox[2],bbox[3]))
         mdt = ds.mdt
-        mdt.to_netcdf(currdir+'/input/cnes_mdt_local.nc')
+        mdt.to_netcdf(currdir+'/input_'+name_experiment+'/cnes_mdt_local.nc')
