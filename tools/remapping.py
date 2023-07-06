@@ -156,7 +156,7 @@ def apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays = 30, 
     return diags_results
 
 # Check MDT is ready
-def make_mdt(name_experiment, currdir, bbox, dataset_mdt = 'mdt_hybrid_cnes_cls18_cmems2020_global.nc'):
+def make_mdt(name_experiment, currdir, bbox, dataset_mdt = "mdt_hybrid_cnes_cls18_cmems2020_global.nc"):
     if(not(os.path.isfile(currdir+'/input_'+name_experiment+'/cnes_mdt_local.nc'))):
         from tools.ftp_transfer import download_mdt
         download_mdt(name_experiment, currdir, dataset_mdt)

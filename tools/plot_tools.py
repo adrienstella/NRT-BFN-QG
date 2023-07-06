@@ -8,6 +8,7 @@ import matplotlib.patches as mpatches
 from datetime import timedelta
 from pandas import to_datetime
 import xarray as xr
+import os
 
 def where_is_this(bbox, pad = 4):
     ax = plt.subplot(projection=ccrs.PlateCarree())
@@ -326,16 +327,19 @@ def plot_l3_data(bbox, datasets, today, numdays, name_exp):
 
     input_path = './scratch/'+name_exp+'/'
 
+    from mpl_toolkits.axes_grid1 import make_axes_locatable
+
     #Show tracks in space
-    plt.figure(figsize=(15, 12))
-    plt.subplots_adjust(hspace=0.2)
-    plt.suptitle("Spatial distribution of observations", fontsize=18, y=0.95)
 
     # set number of columns (use 3 to demonstrate the change)
     ncols = 4
 
     # calculate number of rows
     nrows = len(datasets) // ncols + (len(datasets) % ncols > 0)
+    
+    plt.figure(figsize=(7*ncols, 7*nrows))
+    plt.subplots_adjust(hspace=0.4, wspace=0.7)
+    plt.suptitle("Spatial distribution of observations", fontsize=18, y=0.95)
 
     # loop through the length of tickers and keep track of index
     for n, dataset in enumerate(datasets):
@@ -347,17 +351,23 @@ def plot_l3_data(bbox, datasets, today, numdays, name_exp):
         ds = ds.where((ds['longitude']>bbox[0]) & (ds['longitude']<bbox[1]) & (ds['latitude']>bbox[2]) & (ds['latitude']<bbox[3]),drop = True)
         ds = ds.where((ds['time']>=to_datetime(today-timedelta(days=numdays))) & (ds['time']<=to_datetime(today)), drop = True)
         a = ax.scatter(ds.SSH.longitude, ds.SSH.latitude, c=ds.SSH)
-        plt.colorbar(a)
 
         # chart formatting
         ax.set_title(dataset)
+        ax.set_aspect('equal', 'box')
 
-    plt.savefig('./maps/'+today.strftime('%Y%m%d')+'/L3_data_map'+'.png',bbox_inches='tight')
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        plt.colorbar(a, cax=cax)
+
+    plt.tight_layout()
+    os.makedirs('./maps_'+name_exp+'/'+today.strftime('%Y%m%d')+'/', exist_ok = True)
+    plt.savefig('./maps_'+name_exp+'/'+today.strftime('%Y%m%d')+'/L3_data_map'+'.png',bbox_inches='tight')
     plt.show()
 
     #Show tracks in time
-    plt.figure(figsize=(15, 12))
-    plt.subplots_adjust(hspace=0.4)
+    plt.figure(figsize=(7*ncols, 7*nrows))
+    plt.subplots_adjust(hspace=0.4, wspace=0.5)
     plt.suptitle("Temporal distribution of observations", fontsize=18, y=0.95)
 
     # loop through the length of tickers and keep track of index
@@ -375,5 +385,6 @@ def plot_l3_data(bbox, datasets, today, numdays, name_exp):
         ax.set_title(dataset)
         plt.xticks(rotation=45)
 
-    plt.savefig('./maps/'+today.strftime('%Y%m%d')+'/L3_data_timeseries'+'.png',bbox_inches='tight')
+    plt.tight_layout()
+    plt.savefig('./maps_'+name_exp+'/'+today.strftime('%Y%m%d')+'/L3_data_timeseries'+'.png',bbox_inches='tight')
     plt.show()

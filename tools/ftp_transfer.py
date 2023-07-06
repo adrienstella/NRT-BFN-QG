@@ -158,7 +158,7 @@ def download_mdt(name_experiment, currdir, dataset_mdt):
     os.makedirs(currdir+'/input_'+name_experiment+'/', exist_ok = True)
     os.chdir(currdir+'/input_'+name_experiment+'/')
 
-    ftp.retrbinary("RETR "+'/Core/SEALEVEL_GLO_PHY_MDT_008_063/cnes_obs-sl_glo_phy-mdt_my_0.125deg_P20Y/'+dataset_mdt, open(dataset_mdt, 'wb').write)
+    ftp.retrbinary("RETR "+"/Core/SEALEVEL_GLO_PHY_MDT_008_063/cnes_obs-sl_glo_phy-mdt_my_0.125deg_P20Y/"+dataset_mdt, open(dataset_mdt, 'wb').write)
 
     os.chdir(currdir)
     print('MDT downloaded successfully')
