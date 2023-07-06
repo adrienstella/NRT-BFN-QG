@@ -14,10 +14,11 @@ import sys
 ########################### Parameters to adjust ##########################################################################################
 
 destination = None # Available options : 'ifremer',
-make_lagrangian_diags = False # True or False
+make_lagrangian_diags = True # True or False
+draw_L3 = True
 
 dir_massh = '/bettik/PROJECTS/pr-data-ocean/stellaa/MASSH/mapping'
-path_config = './config_MED_REANALYSES_CSWOT.py' 
+path_config = './config_EUREC4A_REANALYSIS.py' 
 
 
 ###########################################################################################################################################
@@ -42,7 +43,6 @@ bbox = [lon_min, lon_max, lat_min, lat_max]
 from tools.plot_tools import where_is_this
 where_is_this(bbox, 20)
 
-
 ###########################################################################################################################################
 ###  1. DATA DOWNLOAD
 ###########################################################################################################################################
@@ -66,10 +66,8 @@ dataset_l4 = 'dataset-duacs-nrt-global-merged-allsat-phy-l4'
 # FTP connection to CMEMS server and observational data download
 download_nadirs_cmems(name_experiment, currdir, today, numdays, datasets, dataset_l4)
 download_swot_nadir(name_experiment, currdir, today)
-
 # If needed, download and properly formats mdt file
 make_mdt(name_experiment, currdir,bbox)
-
 
 ############################################################################################################################################
 ### 2. BOUNDARY CONDITIONS
@@ -84,7 +82,6 @@ save_new_BC_to = currdir+'/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+
 
 compute_filled_map(BC_data_path, save_new_BC_to, bbox)
 
-
 ############################################################################################################################################
 ### 3. DATA ASSIMILATION WITH MASSH (BFN-QG)
 ############################################################################################################################################
@@ -96,6 +93,19 @@ State = state.State(config)
 # Obs
 from src import obs as obs # if no files to open, re-download data
 dict_obs = obs.Obs(config,State)
+
+if draw_L3 == True:
+    from tools.plot_tools import plot_l3_data
+    l3_datasets = [
+        'obs*ALG',
+        'obs*C2N',
+        'obs*H2B',
+        'obs*S3A',
+        'obs*S3B',
+        'obs*SWOTN',
+        'obs*'
+    ]
+    plot_l3_data(bbox, l3_datasets, today, numdays, name_experiment)
 
 # Model
 from src import mod as mod
@@ -109,14 +119,12 @@ Bc = bc.Bc(config)
 from src import inv as inv
 inv.Inv(config,State,Model,dict_obs=dict_obs,Bc=Bc)
 
-
 ###########################################################################################################################################
 ### 4. RESULTS PROCESSING
 ###########################################################################################################################################
 
 from tools.remapping import nc_processing
 nc_processing(name_experiment, today=today)
-
 
 #######################################################################################
 ### 5. LAMTA LAGRANGIAN DIAGNOSTICS
@@ -125,8 +133,7 @@ nc_processing(name_experiment, today=today)
 if make_lagrangian_diags == True:
     dir_lamta = '/bettik/PROJECTS/pr-data-ocean/stellaa/lamtaLR'
     from tools.remapping import apply_lamta
-    lamta_diags_results = apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays=30, bathylvl =-500)
-
+    lamta_diags_results = apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays=25, bathylvl =-1000)
 
 ###########################################################################################################################################
 ### 6. MAPS UPLOAD

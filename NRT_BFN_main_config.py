@@ -27,7 +27,7 @@ init_date = final_date - timedelta(days=numdays)
 # EXPERIMENTAL PARAMETERS
 #################################################################################################################################
 
-name_experiment = 'MED_REANALYSIS_CSWOT' 
+name_experiment = 'NRT_BFN_main_config' 
 
 EXP = dict(
 
