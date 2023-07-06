@@ -15,24 +15,27 @@ def ftp_cmems_download_month(ftp, product_path, dataset, year, month):
 
     # Change CMEMS directory to the product we want (find the path in the catalogue)
     ftp.cwd(product_path+dataset)
-    ftp.cwd(str(year))
+    if(year in ftp.nlst()):
+        ftp.cwd(year)
     
-    if(len(month)<2):
-        month = '0'+month
+        if(len(month)<2):
+            month = '0'+month
 
-    if month in ftp.nlst():    
-        ftp.cwd(month)
+        if month in ftp.nlst():    
+            ftp.cwd(month)
 
-        # Set the name of the file to download
-        filenames = ftp.nlst()
-        for filename in filenames:
-            print('Retreiving data for '+filename)
+            # Set the name of the file to download
+            filenames = ftp.nlst()
+            for filename in filenames:
+                print('Retreiving data for '+filename)
 
-            # Download the file
-            ftp.retrbinary("RETR "+filename, open(filename, 'wb').write)
-    
+                # Download the file
+                ftp.retrbinary("RETR "+filename, open(filename, 'wb').write)
+        
+        else:
+            print('[Warning] No data folder for month '+ month + ' yet.')
     else:
-        print('[Warning] No data folder for month '+ month + ' yet.')
+        print('[Warning] No data folder for year '+ year + ' yet.')
 
 
 import os
