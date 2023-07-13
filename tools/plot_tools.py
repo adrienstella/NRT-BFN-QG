@@ -389,3 +389,62 @@ def plot_l3_data(bbox, datasets, today, numdays, name_exp):
     plt.tight_layout()
     plt.savefig('./maps_'+name_exp+'/'+today.strftime('%Y%m%d')+'/L3_data_timeseries'+'.png',bbox_inches='tight')
     plt.show()
+
+import glob
+
+def plot_alongtrack_rmse(input_path, name_exp, date_folder):
+
+    bfn_map = xr.open_mfdataset('./output_'+name_exp+'/'+date_folder+'/*.nc', combine='nested', concat_dim = 'time')
+    duacs_map = xr.open_mfdataset('./input_'+name_exp+'/'+date_folder+'/dataset-duacs-nrt-global-merged-allsat-phy-l4/*.nc', combine='nested', concat_dim = 'time')
+
+    tracks = glob.glob(input_path+'obs*')
+    bfn_rmse = np.zeros(len(tracks))
+    duacs_rmse = np.zeros(len(tracks))
+
+    def rmse(predictions, targets):
+        return np.sqrt(np.mean((predictions-targets)**2))
+
+    for n, track in enumerate(tracks) :
+        obs = xr.open_dataset(track)
+        bfn_on_track = bfn_map['ssh'].interp(lon = obs.longitude, lat = obs.latitude, time = obs.time)
+        duacs_on_track = duacs_map['adt'].interp(longitude = obs.longitude, latitude = obs.latitude, time = obs.time)
+
+        bfn_rmse[n]=rmse(bfn_on_track,obs['SSH'])
+        duacs_rmse[n]=rmse(duacs_on_track,obs['SSH'])
+
+    plt.plot(duacs_rmse, label='duacs (total : '+str(np.nansum(duacs_rmse))+')')
+    plt.plot(bfn_rmse, label='bfn (total : '+str(np.nansum(bfn_rmse))+')')
+    plt.title('RMSE between maps and observation tracks')
+    plt.legend()
+    plt.show()
+
+def plot_25_random_tracks(input_path, name_exp, date_folder):
+    plt.figure(figsize=(15, 15))
+    plt.subplots_adjust(hspace=0.4)
+
+    tracks = np.random.choice(glob.glob(input_path+'obs*'), 25)
+    # To choose tracks explicitely, use :
+    #tracks = glob.glob(input_path+'obs*')[0:25]
+
+    bfn_map = xr.open_mfdataset('./output_'+name_exp+'/'+date_folder+'/*.nc', combine='nested', concat_dim = 'time')
+    duacs_map = xr.open_mfdataset('./input_'+name_exp+'/'+date_folder+'/dataset-duacs-nrt-global-merged-allsat-phy-l4/*.nc', combine='nested', concat_dim = 'time')
+
+    # set number of columns and rows
+    ncols = 5
+    nrows = len(tracks) // ncols + (len(tracks) % ncols > 0)
+
+    for n, track in enumerate(tracks) :
+        # add a new subplot iteratively using nrows and cols
+        ax = plt.subplot(nrows, ncols, n + 1)
+
+        obs = xr.open_dataset(track)
+        bfn_on_track = bfn_map['ssh'].interp(lon = obs.longitude, lat = obs.latitude, time = obs.time)
+        duacs_on_track = duacs_map['adt'].interp(longitude = obs.longitude, latitude = obs.latitude, time = obs.time)
+        
+        ax.plot(obs['SSH'].time.values, obs['SSH'].values, label = 'alongtrack observation')
+        ax.plot(bfn_on_track.time.values, bfn_on_track.values, label = 'BFN ouput interpolated alongtrack')
+        ax.plot(duacs_on_track.time.values, duacs_on_track.values, label = 'DUACS L4 interpolated alongtrack')
+        plt.xticks(rotation=45)
+
+    plt.legend()
+    plt.show()
