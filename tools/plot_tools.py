@@ -350,7 +350,8 @@ def plot_l3_data(bbox, datasets, today, numdays, name_exp):
         ds = xr.open_mfdataset(input_path+dataset+'*.nc', combine='nested', concat_dim = 'time')
         ds = ds.where((ds['longitude']>bbox[0]) & (ds['longitude']<bbox[1]) & (ds['latitude']>bbox[2]) & (ds['latitude']<bbox[3]),drop = True)
         ds = ds.where((ds['time']>=to_datetime(today-timedelta(days=numdays))) & (ds['time']<=to_datetime(today)), drop = True)
-        a = ax.scatter(ds.SSH.longitude, ds.SSH.latitude, c=ds.SSH)
+        cmap_range = np.nanmax(np.absolute(ds.SSH))
+        a = ax.scatter(ds.SSH.longitude, ds.SSH.latitude, c=ds.SSH, cmap = 'RdBu_r', vmin = -cmap_range, vmax = cmap_range)
 
         # chart formatting
         ax.set_title(dataset)

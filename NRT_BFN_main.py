@@ -98,11 +98,8 @@ if draw_L3 == True:
     from tools.plot_tools import plot_l3_data
     l3_datasets = [
         'obs*ALG',
-        'obs*C2N',
-        'obs*H2B',
         'obs*S3A',
         'obs*S3B',
-        'obs*SWOTN',
         'obs*'
     ]
     plot_l3_data(bbox, l3_datasets, today, numdays, name_experiment)
@@ -124,7 +121,7 @@ inv.Inv(config,State,Model,dict_obs=dict_obs,Bc=Bc)
 ###########################################################################################################################################
 
 from tools.remapping import nc_processing
-nc_processing(name_experiment, today=today)
+nc_processing(name_experiment, today=today, numdays=35)
 
 #######################################################################################
 ### 5. LAMTA LAGRANGIAN DIAGNOSTICS
@@ -133,7 +130,7 @@ nc_processing(name_experiment, today=today)
 if make_lagrangian_diags == True:
     dir_lamta = '/bettik/PROJECTS/pr-data-ocean/stellaa/lamtaLR'
     from tools.remapping import apply_lamta
-    lamta_diags_results = apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays=25, bathylvl =-1000)
+    lamta_diags_results = apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays=30, bathylvl =-1000)
 
 ###########################################################################################################################################
 ### 6. MAPS UPLOAD

@@ -109,7 +109,7 @@ def download_nadirs_cmems(name_experiment, currdir, today, numdays, datasets, da
         m=0
         month = today.month
         year = today.year
-        while ((month != first_day.month) | (year != first_day.year)):
+        while (((month != first_day.month) | (year != first_day.year) | (m==0))):
             month = (today.month-m)%12
             if month == 0:
                 month = 12
@@ -130,7 +130,7 @@ def download_nadirs_cmems(name_experiment, currdir, today, numdays, datasets, da
     m=0
     month = today.month
     year = today.year
-    while ((month != first_day.month) | (year != first_day.year)):
+    while (((month != first_day.month) | (year != first_day.year) | (m==0))):
         month = (today.month-m)%12
         if month == 0:
             month = 12
