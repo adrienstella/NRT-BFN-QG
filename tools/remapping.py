@@ -28,7 +28,7 @@ def compute_filled_map(BC_data_path, save_to, bbox):
     ds.to_netcdf(save_to, mode = 'w')
 
 
-def nc_processing(name_experiment, today):
+def nc_processing(name_experiment, today, numdays = 6):
 
     # A few physical parameters for computations
     g=9.81 # m/s2
@@ -38,8 +38,8 @@ def nc_processing(name_experiment, today):
     # Load the last week and take daily averages
     bfn_output = xr.open_mfdataset('./output_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/*.nc', concat_dim='time', combine='nested')
     bfn_output_dates = bfn_output.assign(time=to_datetime(bfn_output.time.dt.date))
-    last_week = bfn_output_dates.where(bfn_output_dates.time >= to_datetime(today-timedelta(days=6)), drop =True)
-    daily_mean_ssh = last_week.groupby("time").mean("time")
+    interest_period = bfn_output_dates.where(bfn_output_dates.time >= to_datetime(today-timedelta(days=numdays)), drop =True)
+    daily_mean_ssh = interest_period.groupby("time").mean("time")
 
     # Create the dy, dx and f grids based on physical parameters
     lon=daily_mean_ssh.lon.values
@@ -145,7 +145,7 @@ def apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays = 30, 
 
     # Save results of lagragian diagnostics
     os.makedirs(currdir+'/maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/Lamta/', exist_ok = True)
-    diags_results.to_netcdf(currdir+'/maps/'+today.strftime('%Y%m%d')+'/Lamta/NRT_BFN_lamta_diags'+today.strftime('%Y%m%d')+'.nc', mode = 'w')
+    diags_results.to_netcdf(currdir+'/maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/Lamta/NRT_BFN_lamta_diags'+today.strftime('%Y%m%d')+'.nc', mode = 'w')
 
     # Make and save Lagrangian diagnostics plots
     fig = show_ssh_ug_xinorm(bfn_output,bbox,np.datetime64(dayv),'BFN output maps')
@@ -156,7 +156,7 @@ def apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays = 30, 
     return diags_results
 
 # Check MDT is ready
-def make_mdt(name_experiment, currdir, bbox, dataset_mdt = 'mdt_hybrid_cnes_cls18_cmems2020_global.nc'):
+def make_mdt(name_experiment, currdir, bbox, dataset_mdt = "mdt_hybrid_cnes_cls18_cmems2020_global.nc"):
     if(not(os.path.isfile(currdir+'/input_'+name_experiment+'/cnes_mdt_local.nc'))):
         from tools.ftp_transfer import download_mdt
         download_mdt(name_experiment, currdir, dataset_mdt)

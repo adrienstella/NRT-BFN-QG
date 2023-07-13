@@ -109,7 +109,7 @@ def download_nadirs_cmems(name_experiment, currdir, today, numdays, datasets, da
         m=0
         month = today.month
         year = today.year
-        while ((month != first_day.month) | (year != first_day.year)):
+        while (((month != first_day.month) | (year != first_day.year) | (m==0))):
             month = (today.month-m)%12
             if month == 0:
                 month = 12
@@ -130,7 +130,7 @@ def download_nadirs_cmems(name_experiment, currdir, today, numdays, datasets, da
     m=0
     month = today.month
     year = today.year
-    while ((month != first_day.month) | (year != first_day.year)):
+    while (((month != first_day.month) | (year != first_day.year) | (m==0))):
         month = (today.month-m)%12
         if month == 0:
             month = 12
@@ -158,7 +158,7 @@ def download_mdt(name_experiment, currdir, dataset_mdt):
     os.makedirs(currdir+'/input_'+name_experiment+'/', exist_ok = True)
     os.chdir(currdir+'/input_'+name_experiment+'/')
 
-    ftp.retrbinary("RETR "+'/Core/SEALEVEL_GLO_PHY_MDT_008_063/cnes_obs-sl_glo_phy-mdt_my_0.125deg_P20Y/'+dataset_mdt, open(dataset_mdt, 'wb').write)
+    ftp.retrbinary("RETR "+"/Core/SEALEVEL_GLO_PHY_MDT_008_063/cnes_obs-sl_glo_phy-mdt_my_0.125deg_P20Y/"+dataset_mdt, open(dataset_mdt, 'wb').write)
 
     os.chdir(currdir)
     print('MDT downloaded successfully')
