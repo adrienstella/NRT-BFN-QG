@@ -10,12 +10,12 @@ import os
 from datetime import timedelta
 import sys
 
-
 ########################### Parameters to adjust ##########################################################################################
 
 destination = None # Available options : 'ifremer',
-make_lagrangian_diags = True # True or False
-draw_L3 = True
+make_lagrangian_diags = False # True or False
+draw_L3 = True # True or False
+make_alongtrack_rmse = True # True or False
 
 dir_massh = '/bettik/PROJECTS/pr-data-ocean/stellaa/MASSH/mapping'
 path_config = './config_EUREC4A_REANALYSIS.py' 
@@ -123,8 +123,17 @@ inv.Inv(config,State,Model,dict_obs=dict_obs,Bc=Bc)
 from tools.remapping import nc_processing
 nc_processing(name_experiment, today=today, numdays=35)
 
+##############################################################################################################################
+### 5. ALONGTRACK OBS COMPARISON
+##############################################################################################################################
+
+if make_alongtrack_rmse == True:
+    from tools.plot_tools import plot_alongtrack_rmse, plot_25_random_tracks
+    plot_25_random_tracks('./scratch/'+name_experiment+'/', name_experiment, today.strftime('%Y%m%d'))
+    plot_alongtrack_rmse('./scratch/'+name_experiment+'/', name_experiment, today.strftime('%Y%m%d'))
+
 #######################################################################################
-### 5. LAMTA LAGRANGIAN DIAGNOSTICS
+### 6. LAMTA LAGRANGIAN DIAGNOSTICS
 #######################################################################################
 
 if make_lagrangian_diags == True:
@@ -133,7 +142,7 @@ if make_lagrangian_diags == True:
     lamta_diags_results = apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays=30, bathylvl =-1000)
 
 ###########################################################################################################################################
-### 6. MAPS UPLOAD
+### 7. MAPS UPLOAD
 ###########################################################################################################################################
 # Here, choose the right function to send to the right place. 
 
