@@ -66,4 +66,9 @@ git clone https://github.com/leguillf/MASSH.git
 
 (e) Create your own experiment by making a copy of the NRT_BFN_main_config.py file and adjusting the parameters to fit your needs. Don't forget to point to that new config file in the main script's 'path_config' variable.
 
-You're good to go! Just run NRT_BFN_main.py (or the notebook version) to start mapping.
+(f) From your local NRT-BFN-QG folder, create the dedicated environment by running the following command (recommended, requires Anaconda):
+```
+conda env create -f nrt_bfn_env.yml
+```
+
+You're good to go! Just run NRT_BFN_main.py (or the notebook version) with this environment to start mapping.
