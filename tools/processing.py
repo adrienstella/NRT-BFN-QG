@@ -6,7 +6,51 @@ from pandas import to_datetime
 from datetime import timedelta
 import os
 
+# Check MDT is ready
+def make_mdt(name_experiment, currdir, bbox, dataset_mdt = "mdt_hybrid_cnes_cls18_cmems2020_global.nc"):
+
+    """
+    Checks if the Mean Dynamic Topography (MDT) file is available for a given experiment, and creates it if needed.
+
+    Args:
+        name_experiment (str): The name of the experiment.
+        currdir (str): The current directory.
+        bbox (list): The bounding box coordinates [lon_min, lon_max, lat_min, lat_max].
+        dataset_mdt (str): The dataset MDT filename.
+
+    Returns:
+        None
+
+    The function checks if the local MDT file exists. If not, it downloads the MDT file and creates a local copy
+    within the experiment directory. The MDT is then subsetted to the specified bounding box.
+    """
+
+    if(not(os.path.isfile(currdir+'/input_'+name_experiment+'/cnes_mdt_local.nc'))):
+        from tools.ftp_transfer import download_mdt
+        download_mdt(name_experiment, currdir, dataset_mdt)
+        ds = xr.open_dataset(currdir+'/input_'+name_experiment+'/'+dataset_mdt)
+        ds = ds.sel(longitude = slice(bbox[0],bbox[1]), latitude = slice(bbox[2],bbox[3]))
+        mdt = ds.mdt
+        mdt.to_netcdf(currdir+'/input_'+name_experiment+'/cnes_mdt_local.nc')
+
 def compute_filled_map(BC_data_path, save_to, bbox):
+
+    """
+    Computes and saves the filled map based on the provided boundary condition data.
+
+    Args:
+        BC_data_path (str): The path to the boundary condition data.
+        save_to (str): The path to save the filled map.
+        bbox (list): The bounding box coordinates [lon_min, lon_max, lat_min, lat_max].
+
+    Returns:
+        None
+
+    The function opens the boundary condition data and subsets it to the specified bounding box. It then computes the
+    filled map using the Gaussian Seidel method and saves the result to the specified location. The point of this operation
+    is that the filled map can be masked by a different resolution land mask without having ill-valued pixels at coastlines.
+    """
+
     ds = xr.open_mfdataset(BC_data_path)
     ds = ds.sel(longitude = slice(bbox[0],bbox[1]), latitude = slice(bbox[2],bbox[3]))
 
@@ -29,6 +73,22 @@ def compute_filled_map(BC_data_path, save_to, bbox):
 
 
 def nc_processing(name_experiment, today, numdays = 6):
+
+    """
+    Performs netCDF processing for the given experiment and time period.
+
+    Args:
+        name_experiment (str): The name of the experiment.
+        today (datetime.date): The current date.
+        numdays (int): The number of days to consider for processing. Default is 6.
+
+    Returns:
+        None
+
+    The function performs netCDF processing for the specified experiment and time period. It opens the output files
+    from the experiment, calculates the daily mean sea surface height (SSH), and computes additional variables such
+    as U, V, and PV. The processed data is saved as netCDF files.
+    """
 
     # A few physical parameters for computations
     g=9.81 # m/s2
@@ -89,8 +149,31 @@ def nc_processing(name_experiment, today, numdays = 6):
 import sys
 from datetime import date
 import matplotlib.pyplot as plt
+
 def apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays = 30, delta0 = 0.02, step = 4, bathylvl = -500):
     
+    """
+    Applies the Lagrangian Analysis of Mixing and Tracer Advection (LAMTA) algorithm to the given experiment.
+
+    Args:
+        name_experiment (str): The name of the experiment.
+        currdir (str): The current directory.
+        dir_lamta (str): The directory of the LAMTA algorithm.
+        today (datetime.date): The current date.
+        bbox (list): The bounding box coordinates [lon_min, lon_max, lat_min, lat_max].
+        numdays (int): The number of days to consider. Default is 30.
+        delta0 (float): The initial distance between particles (°). Default is 0.02.
+        step (int): The number of integration steps per day. Default is 4.
+        bathylvl (int): The bathymetry level from which to study particles resurfacing. Default is -500.
+
+    Returns:
+        xr.Dataset: The Lagrangian diagnostic results.
+
+    The function applies the LAMTA algorithm to the given experiment. It loads the required modules and data,
+    performs the LAMTA analysis, and saves the Lagrangian diagnostic results. Additionally, it generates and saves
+    various plots related to the analysis.
+    """
+
     sys.path.append(dir_lamta)
 
     from Diagnostics import ParticleSet, Lagrangian
@@ -154,13 +237,3 @@ def apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays = 30, 
 
     plot_diags_no_sst(diags_results,bbox,today,bathylvl,save_folder=currdir+'/maps/'+today.strftime('%Y%m%d')+'/Lamta/')
     return diags_results
-
-# Check MDT is ready
-def make_mdt(name_experiment, currdir, bbox, dataset_mdt = "mdt_hybrid_cnes_cls18_cmems2020_global.nc"):
-    if(not(os.path.isfile(currdir+'/input_'+name_experiment+'/cnes_mdt_local.nc'))):
-        from tools.ftp_transfer import download_mdt
-        download_mdt(name_experiment, currdir, dataset_mdt)
-        ds = xr.open_dataset(currdir+'/input_'+name_experiment+'/'+dataset_mdt)
-        ds = ds.sel(longitude = slice(bbox[0],bbox[1]), latitude = slice(bbox[2],bbox[3]))
-        mdt = ds.mdt
-        mdt.to_netcdf(currdir+'/input_'+name_experiment+'/cnes_mdt_local.nc')

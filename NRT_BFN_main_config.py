@@ -18,9 +18,9 @@ from datetime import datetime,timedelta,date,time
 
 final_date = datetime.combine(date.today(), time())
 #final_date = datetime.combine(date.fromisoformat('2023-06-13'), time())
-today = final_date.strftime('%Y%m%d')
-
 numdays = 8
+
+today = final_date.strftime('%Y%m%d')
 init_date = final_date - timedelta(days=numdays)
  
 #################################################################################################################################

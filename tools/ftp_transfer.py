@@ -42,7 +42,24 @@ import os
 from ftplib import error_perm
 
 def place_files(ftp, path):
-    # A function that uploads everything in path (subfolders included) to the directory to which ftp is connected.
+    """
+    Uploads all files and subfolders in the given path to the directory connected to the FTP server.
+
+    Args:
+        ftp (ftplib.FTP): An FTP object, already connected to the target directory.
+        path (str): The local path to the directory containing files and subfolders to upload.
+
+    Returns:
+        None
+
+    Raises:
+        ftplib.error_perm: If there is an error during FTP operations.
+
+    The function iterates over the files and subfolders in the specified local path. For each file,
+    it uploads the file to the connected FTP directory using the STOR command. For each subfolder,
+    it creates a corresponding directory on the FTP server using the MKD command. The function then
+    recursively calls itself for each subfolder to upload its contents.
+    """
     for name in os.listdir(path):
         localpath = os.path.join(path, name)
         if os.path.isfile(localpath):
@@ -69,6 +86,27 @@ import secretcodes
 from ftplib import FTP
 def ftp_to_ifremer(name_experiment, today, currdir):
 
+    """
+    Uploads files to the IFREMER FTP server for a specific experiment.
+
+    Args:
+        name_experiment (str): The name of the experiment.
+        today (datetime.datetime): The current experiment date.
+        currdir (str): The current working directory.
+
+    Returns:
+        None
+
+    The function connects to the IFREMER FTP server using the provided credentials and navigates to
+    the 'MEDSSH_BFN' directory. It creates a subdirectory with the current date in the 'MEDSSH_BFN'
+    directory, then, it calls the 'place_files' function to upload the files to the FTP server. 
+    Finally, it closes the FTP connection.
+
+    Note:
+        - The 'secretcodes' module must contain the 'ifremer_username' and 'ifremer_password' variables
+          with the appropriate FTP credentials.
+    """
+
     # Set user name and password
     username = secretcodes.ifremer_username
     password = secretcodes.ifremer_password
@@ -88,7 +126,33 @@ def ftp_to_ifremer(name_experiment, today, currdir):
 
 import numpy as np
 from datetime import timedelta
+
 def download_nadirs_cmems(name_experiment, currdir, today, numdays, datasets, dataset_l4):
+
+    """
+    Downloads nadir data from the CMEMS FTP server for a specific experiment.
+
+    Args:
+        name_experiment (str): The name of the experiment.
+        currdir (str): The current working directory.
+        today (datetime.datetime): The current experiment date.
+        numdays (int): The minimum number of days to go back for data download.
+        datasets (list): A list of dataset names to download (alongtrack data).
+        dataset_l4 (str): The name of the L4 dataset to download.
+
+    Returns:
+        None
+
+    The function connects to the CMEMS FTP server using the provided credentials and downloads nadir
+    data for the specified datasets. It creates the necessary directories to store the downloaded data
+    within the experiment's input folder. It then iterates over the months starting from the
+    current month and goes back as many months as needed to cover 'numdays'. 
+
+    Note:
+        - The 'secretcodes' module must contain the 'cmems_username' and 'cmems_password' variables
+          with the appropriate FTP credentials.
+    """
+
     # Set user name and password
     username = secretcodes.cmems_username
     password = secretcodes.cmems_password
@@ -145,6 +209,26 @@ def download_nadirs_cmems(name_experiment, currdir, today, numdays, datasets, da
     ftp.quit()
 
 def download_mdt(name_experiment, currdir, dataset_mdt):
+
+    """
+    Downloads Mean Dynamic Topography (MDT) data from the CMEMS FTP server for a specific experiment.
+
+    Args:
+        name_experiment (str): The name of the experiment.
+        currdir (str): The current working directory.
+        dataset_mdt (str): The name of the MDT dataset to download.
+
+    Returns:
+        None
+
+    The function connects to the CMEMS FTP server using the provided credentials and downloads the Mean
+    Dynamic Topography (MDT) dataset to the specified experiment's input folder. 
+
+    Note:
+        - The 'secretcodes' module must contain the 'cmems_username' and 'cmems_password' variables
+          with the appropriate FTP credentials.
+    """
+
     # Set user name and password
     username = secretcodes.cmems_username
     password = secretcodes.cmems_password
@@ -166,8 +250,30 @@ def download_mdt(name_experiment, currdir, dataset_mdt):
     ftp.quit()
 
 import re
+
 def download_swot_nadir(name_experiment, currdir, today):
-    # Download SWOT nadir L3 data from AVISO
+
+    """
+    Downloads SWOT nadir L3 data from AVISO for a specific experiment.
+
+    Args:
+        name_experiment (str): The name of the experiment.
+        currdir (str): The current working directory.
+        today (datetime.datetime): The current date.
+
+    Returns:
+        None
+
+    The function connects to the AVISO FTP server using the provided credentials and downloads SWOT nadir
+    L3 data for the specified experiment. It retrieves the list of available filenames from the FTP server.
+    It iterates over the filenames and downloads each file using the 'retrbinary' command. Then, it selects
+    the most recent version of the data for each available observation date.
+
+    Note:
+        - The 'secretcodes' module must contain the 'swot_username' and 'swot_password' variables with
+          the appropriate FTP credentials.
+    """
+
     # Set user name and password
     username = secretcodes.swot_username
     password = secretcodes.swot_password
