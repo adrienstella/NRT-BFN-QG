@@ -11,6 +11,21 @@ import xarray as xr
 import os
 
 def where_is_this(bbox, pad = 4):
+
+    """
+    Displays a map showing the specified bounding box.
+
+    Args:
+        bbox (list): A list containing the bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
+        pad (float): Optional. The padding value in degrees to extend the bounding box. Default is 4.
+
+    Returns:
+        None
+
+    The function creates a map using Matplotlib and Cartopy to display the specified bounding box. The map is centered
+    on the bounding box with a given padding value.
+    """
+
     ax = plt.subplot(projection=ccrs.PlateCarree())
     ax.set_global()
     ax.set_extent([bbox[0]-pad, bbox[1]+pad, bbox[2]-pad, bbox[3]+pad],crs=ccrs.PlateCarree())
@@ -33,6 +48,29 @@ def where_is_this(bbox, pad = 4):
 
 # map plotting function to create individual pcolormesh subplot with ax objects
 def format_axis_map(data, axes, longitudes, latitudes, bbox = None, colormap='RdBu_r', subplot_title='*insert title here*', cmap_range=None):
+    
+    """
+    Formats and displays a map with data on the specified axes.
+
+    Args:
+        data (array-like): The data to be plotted on the map.
+        axes (matplotlib.axes.Axes): The axes on which to plot the map.
+        longitudes (array-like): The array of longitude values.
+        latitudes (array-like): The array of latitude values.
+        bbox (list): Optional. The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat]. If not provided, the extent is automatically determined from the longitudes and latitudes. Default is None.
+        colormap (str): Optional. The colormap to be used for the data. Default is 'RdBu_r'.
+        subplot_title (str): The title of the subplot.
+        cmap_range (float or list or tuple): Optional. The range of values for the colormap. If a single float is provided, it is used as both vmin and vmax. If a list or tuple is provided, it should contain the vmin and vmax values. If not provided, the maximum absolute value of the data is used.
+
+    Returns:
+        tuple: A tuple containing the formatted axes and the map object.
+
+    The function takes the data, axes, longitudes, and latitudes as inputs and plots the data on the specified
+    axes as a map. The map is formatted with the specified colormap, subplot title, and color range. The bounding
+    box can be explicitly provided or automatically determined from the longitudes and latitudes. The function
+    returns a tuple containing the formatted axes and the map object.
+    """
+    
     if bbox == None:
         bbox = [np.min(longitudes), np.max(longitudes), np.min(latitudes), np.max(latitudes)]
         
@@ -87,8 +125,30 @@ def format_axis_map(data, axes, longitudes, latitudes, bbox = None, colormap='Rd
 
 
 
-# map plotting function to create individual vector subplot with ax objects
 def format_axis_quiver(data_x, data_y, axes, longitudes, latitudes, bbox = None, subplot_title='*insert title here*'):
+    
+    """
+    Formats and displays a quiver plot on the specified axes.
+
+    Args:
+        data_x (array-like): The x-component of the vector data.
+        data_y (array-like): The y-component of the vector data.
+        axes (matplotlib.axes.Axes): The axes on which to plot the quiver plot.
+        longitudes (array-like): The array of longitude values.
+        latitudes (array-like): The array of latitude values.
+        bbox (list): Optional. The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat]. If not provided, the extent is automatically determined from the longitudes and latitudes. Default is None.
+        subplot_title (str): The title of the subplot.
+
+    Returns:
+        tuple: A tuple containing the formatted axes and the quiver plot object.
+
+    The function takes the x-component, y-component, axes, longitudes, and latitudes as inputs and plots a quiver
+    plot on the specified axes. The quiver plot represents the vector data using arrows. The plot is formatted with
+    the specified subplot title and bounding box. The bounding box can be explicitly provided or automatically
+    determined from the longitudes and latitudes. The function returns a tuple containing the formatted axes and the
+    quiver plot object.
+    """
+    
     if bbox == None:
         bbox = [np.min(longitudes), np.max(longitudes), np.min(latitudes), np.max(latitudes)]
         
@@ -115,6 +175,26 @@ def format_axis_quiver(data_x, data_y, axes, longitudes, latitudes, bbox = None,
     return (axes, map)
 
 def show_ssh_ug_xinorm(ds, bbox, snapshot_time, title = '*insert title here*', s_factor=0.12, title_adjust=1.6):
+
+    """
+    Displays a figure with three subplots showing sea surface height, velocity norm, and relative vorticity data.
+
+    Args:
+        ds (xarray.Dataset): The dataset containing the required variables.
+        bbox (list): The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
+        snapshot_time (datetime.datetime): The time snapshot to display.
+        title (str): The title of the figure.
+        s_factor (float): Optional. The scale factor for colorbar size. Default is 0.12.
+        title_adjust (float): Optional. The top adjustment value for the figure suptitle. Default is 1.6.
+
+    Returns:
+        matplotlib.figure.Figure: The created figure.
+
+    The function takes a dataset, bounding box coordinates, snapshot time, title, and scaling parameters as inputs
+    and displays a figure with three subplots. (a) sea surface height (SSH) or absolute dynamic
+    topography (ADT) data, (b) velocity norm (Ug) data, (c) realtive vorticity (xi/f).
+    Each subplot is formatted with the specified colormap, title, and color range. The function returns the created figure.
+    """
 
     plt.rcParams.update({'font.size': 6})
 
@@ -155,6 +235,27 @@ def show_ssh_ug_xinorm(ds, bbox, snapshot_time, title = '*insert title here*', s
 
 def show_ug_trio(ds1, ds2, ds3, bbox, snapshot_time, title = '*insert title here*', s_factor=0.12, title_adjust=1.6):
 
+    """
+    Displays a figure with three subplots showing velocity norm data from three datasets.
+
+    Args:
+        ds1 (xarray.Dataset): The first dataset.
+        ds2 (xarray.Dataset): The second dataset.
+        ds3 (xarray.Dataset): The third dataset.
+        bbox (list): The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
+        snapshot_time (datetime.datetime): The time snapshot to display.
+        title (str): The title of the figure.
+        s_factor (float): Optional. The scale factor for colorbar size. Default is 0.12.
+        title_adjust (float): Optional. The top adjustment value for the figure suptitle. Default is 1.6.
+
+    Returns:
+        None
+
+    The function takes three datasets, a bounding box, snapshot time, title, and scaling parameters as inputs and
+    displays a figure with three subplots. Each subplot shows the velocity norm (Ug) data from the respective dataset.
+    Each subplot is formatted with the specified colormap, title, and color range.
+    """
+
     plt.rcParams.update({'font.size': 6})
 
     def get_u_norm(ds):
@@ -183,75 +284,29 @@ def show_ug_trio(ds1, ds2, ds3, bbox, snapshot_time, title = '*insert title here
     fig.subplots_adjust(top=title_adjust)
     plt.show()
 
-
-def plot_all_diags(diags_results, bbox, today, crop='', s_factor = [0.12,0.12,0.22], title_adjust = [1.6,1.6,1.5], bathylvl = 700):
-    
-    plt.rcParams.update({'font.size': 6})
-    title = 'Longitude and latitude advection and Finite-Time Lyapunov Exponents'
-
-    fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, sharey=True, subplot_kw={'projection': ccrs.PlateCarree()},dpi=300)
-
-    ax1, map1 = format_axis_map(diags_results.lonf_map, ax1, diags_results.lon, diags_results.lat, bbox,'BrBG_r', 'Adv lon')
-    ax1.tick_params('y')
-    plt.colorbar(map1, shrink = s_factor[0], orientation = 'vertical', label = '', ax=ax1)
-
-    ax2, map2 = format_axis_map(diags_results.latf_map, ax2, diags_results.lon, diags_results.lat, bbox,'RdBu_r', 'Adv lat')
-    ax2.tick_params('y', labelleft=False)
-    plt.colorbar(map2, shrink = s_factor[0], orientation = 'vertical', label = '', ax=ax2)
-
-    ax3, map3 = format_axis_map(diags_results.ftle, ax3, diags_results.lon, diags_results.lat, bbox,'inferno', 'FTLE', [0,1])
-    ax3.tick_params('y', labelleft=False)
-    plt.colorbar(map3, shrink = s_factor[0], orientation = 'vertical', label = '', ax=ax3)
-
-    fig.suptitle(title+' on '+today.strftime('%Y%m%d'))
-    plt.tight_layout()
-    fig.subplots_adjust(top=title_adjust[0])
-    plt.savefig('./maps/'+today.strftime('%Y%m%d')+'/'+today.strftime('%Y%m%d')+'_lonlatadv_FSLE'+crop+'.png',bbox_inches='tight')
-    plt.show()
-
-
-    title = 'Time, lon, lat from bathy level = '+str(abs(bathylvl))+'m'
-
-    fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, sharey=True, subplot_kw={'projection': ccrs.PlateCarree()},dpi=300)
-
-    ax1, map1 = format_axis_map(diags_results.timfb, ax1, diags_results.lon, diags_results.lat, bbox,'turbo', 'Time from '+str(abs(bathylvl))+'m')
-    ax1.tick_params('y')
-    plt.colorbar(map1, shrink = s_factor[1], orientation = 'vertical', label = '', ax=ax1)
-
-    ax2, map2 = format_axis_map(diags_results.lonfb, ax2, diags_results.lon, diags_results.lat, bbox,'turbo', 'Longitude from '+str(abs(bathylvl))+'m', bbox[0:2])
-    ax2.tick_params('y', labelleft=False)
-    plt.colorbar(map2, shrink = s_factor[1], orientation = 'vertical', label = '', ax=ax2)
-
-    ax3, map3 = format_axis_map(diags_results.latfb, ax3, diags_results.lon, diags_results.lat, bbox,'turbo', 'Latitude from '+str(abs(bathylvl))+'m', bbox[2:])
-    ax3.tick_params('y', labelleft=False)
-    plt.colorbar(map3, shrink = s_factor[1], orientation = 'vertical', label = '', ax=ax3)
-
-    fig.suptitle(title+' on '+today.strftime('%Y%m%d'))
-    plt.tight_layout()
-    fig.subplots_adjust(top=title_adjust[1])
-    plt.savefig('./maps/'+today.strftime('%Y%m%d')+'/'+today.strftime('%Y%m%d')+'_diags_bathy'+crop+'.png',bbox_inches='tight')
-    plt.show()
-
-    title = 'OW disp & SST advection'
-
-    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharey=True, subplot_kw={'projection': ccrs.PlateCarree()},dpi=300)
-
-    ax1, map1 = format_axis_map(diags_results.owdisp, ax1, diags_results.lon, diags_results.lat, bbox,'PuOr', 'OWdisp', [-15,0])
-    ax1.tick_params('y')
-    plt.colorbar(map1, shrink = s_factor[2], orientation = 'vertical', label = '', ax=ax1)
-
-    ax2, map2 = format_axis_map(diags_results.sstadv, ax2, diags_results.lon, diags_results.lat, bbox,'inferno', 'SST advection', [14,20])
-    ax2.tick_params('y', labelleft=False)
-    plt.colorbar(map2, shrink = s_factor[2], orientation = 'vertical', label = '', ax=ax2)
-
-    fig.suptitle(title+' on '+today.strftime('%Y%m%d'))
-    plt.tight_layout()
-    fig.subplots_adjust(top=title_adjust[2])
-    plt.savefig('./maps/'+today.strftime('%Y%m%d')+'/'+today.strftime('%Y%m%d')+'_OWdisp_SST'+crop+'.png',bbox_inches='tight')
-    plt.show()
-
 def plot_diags_no_sst(diags_results, bbox, today, bathylvl, crop='', s_factor = [0.12,0.12,0.35], title_adjust = [1.6,1.6,1.5], save_folder = './maps/'):
     
+    """
+    Plots Lamta diagnostic results. 
+
+    Args:
+        diags_results: The diagnostic results object (made using Louise Rousslet's algorithm).
+        bbox (list): The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
+        today (datetime.datetime): The current date.
+        bathylvl (float): The bathymetry level.
+        crop (str): Optional. Crop parameter for the figure filenames. Default is an empty string.
+        s_factor (list): Optional. The scale factors for colorbar size. Default is [0.12, 0.12, 0.35].
+        title_adjust (list): Optional. The top adjustment values for the figure suptitles. Default is [1.6, 1.6, 1.5].
+        save_folder (str): Optional. The folder path to save the figures. Default is './maps/'.
+
+    Returns:
+        None
+
+    The function plots Lamta diagnostic results. It generates three sets of subplots for different diagnostic results. 
+    Each subplot is formatted with the specified colormap, title, color range, and colorbar label. 
+    The figures are saved and displayed but not returned.
+    """
+
     # Creating the FTLE colormap
     cmap = plt.cm.ocean_r
     n=90
@@ -325,6 +380,24 @@ def plot_diags_no_sst(diags_results, bbox, today, bathylvl, crop='', s_factor = 
 
 def plot_l3_data(bbox, datasets, today, numdays, name_exp):
 
+    """
+    Plots the spatial and temporal distribution of L3 data used in the experiment.
+
+    Args:
+        bbox (list): The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
+        datasets (list): A list of dataset names.
+        today (datetime.datetime): The current date.
+        numdays (int): The number of days to consider.
+        name_exp (str): The name of the experiment.
+
+    Returns:
+        None
+
+    The function plots the spatial and temporal distribution of L3 data for each dataset in the given list. It generates
+    two sets of subplots: one for spatial distribution and one for temporal distribution. Each subplot is formatted with
+    the specified colormap, color range, and colorbar. The figures are saved and displayed but not returned.
+    """
+
     input_path = './scratch/'+name_exp+'/'
 
     from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -394,6 +467,21 @@ import glob
 
 def plot_alongtrack_rmse(input_path, name_exp, date_folder):
 
+    """
+    Plots the RMSE between maps and observation tracks.
+
+    Args:
+        input_path (str): The path to the observation tracks.
+        name_exp (str): The name of the experiment.
+        date_folder (str): The date folder.
+
+    Returns:
+        None
+
+    The function opens the necessary map datasets and observation tracks. It calculates the RMSE between the maps and
+    observation tracks and plots the results. The figures are displayed but not returned.
+    """
+
     bfn_map = xr.open_mfdataset('./output_'+name_exp+'/'+date_folder+'/*.nc', combine='nested', concat_dim = 'time')
     duacs_map = xr.open_mfdataset('./input_'+name_exp+'/'+date_folder+'/dataset-duacs-nrt-global-merged-allsat-phy-l4/*.nc', combine='nested', concat_dim = 'time')
 
@@ -419,6 +507,22 @@ def plot_alongtrack_rmse(input_path, name_exp, date_folder):
     plt.show()
 
 def plot_25_random_tracks(input_path, name_exp, date_folder):
+
+    """
+    Plots 25 randomly chosen observation tracks along with map data.
+
+    Args:
+        input_path (str): The path to the observation tracks.
+        name_exp (str): The name of the experiment.
+        date_folder (str): The date folder.
+
+    Returns:
+        None
+
+    The function opens the necessary map datasets and selects 25 random observation tracks. It plots each observation
+    track along with the corresponding map data. The figures are displayed but not returned.
+    """
+
     plt.figure(figsize=(15, 15))
     plt.subplots_adjust(hspace=0.4)
 

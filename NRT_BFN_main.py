@@ -17,8 +17,8 @@ make_lagrangian_diags = False # True or False
 draw_L3 = True # True or False
 make_alongtrack_rmse = True # True or False
 
-dir_massh = '/bettik/PROJECTS/pr-data-ocean/stellaa/MASSH/mapping'
-path_config = './config_EUREC4A_REANALYSIS.py' 
+dir_massh = '../MASSH/mapping'
+path_config = './NRT_BFN_main_config.py' 
 
 
 ###########################################################################################################################################
@@ -48,7 +48,7 @@ where_is_this(bbox, 20)
 ###########################################################################################################################################
 
 from tools.ftp_transfer import download_nadirs_cmems, download_swot_nadir
-from tools.remapping import make_mdt
+from tools.processing import make_mdt
 
 # What datasets to download
 datasets = [
@@ -73,7 +73,7 @@ make_mdt(name_experiment, currdir,bbox)
 ### 2. BOUNDARY CONDITIONS
 ############################################################################################################################################
 
-from tools.remapping import compute_filled_map
+from tools.processing import compute_filled_map
 
 # Rework DUACS dataset for optimal boundary conditions : extrapolate data to fill coasts. 
 # Then a mask is used in MASSH to select only ocean and avoid awkward 0 values around coasts
@@ -98,8 +98,11 @@ if draw_L3 == True:
     from tools.plot_tools import plot_l3_data
     l3_datasets = [
         'obs*ALG',
+        'obs*C2N',
+        'obs*H2B',
         'obs*S3A',
         'obs*S3B',
+        'obs*SWOTN',
         'obs*'
     ]
     plot_l3_data(bbox, l3_datasets, today, numdays, name_experiment)
@@ -120,8 +123,8 @@ inv.Inv(config,State,Model,dict_obs=dict_obs,Bc=Bc)
 ### 4. RESULTS PROCESSING
 ###########################################################################################################################################
 
-from tools.remapping import nc_processing
-nc_processing(name_experiment, today=today, numdays=35)
+from tools.processing import nc_processing
+nc_processing(name_experiment, today=today, numdays=6)
 
 ##############################################################################################################################
 ### 5. ALONGTRACK OBS COMPARISON
