@@ -504,6 +504,7 @@ def plot_alongtrack_rmse(input_path, name_exp, date_folder):
     plt.plot(bfn_rmse, label='bfn (total : '+str(np.nansum(bfn_rmse))+')')
     plt.title('RMSE between maps and observation tracks')
     plt.legend()
+    plt.savefig('./maps_'+name_exp+'/'+date_folder+'/RMSE_to_obs_tracks.png',bbox_inches='tight')
     plt.show()
 
 def plot_25_random_tracks(input_path, name_exp, date_folder):
@@ -551,4 +552,117 @@ def plot_25_random_tracks(input_path, name_exp, date_folder):
         plt.xticks(rotation=45)
 
     plt.legend()
+    plt.savefig('./maps_'+name_exp+'/'+date_folder+'/25_random_tracks_check.png',bbox_inches='tight')
     plt.show()
+
+def make_comp_plot(name_exp, date_folder, bbox, snap_time, bfn_map = None, duacs_map_crop = None):
+
+    """
+    Creates a comparison plot of DUACS and BFN maps for a given snapshot time.
+
+    Args:
+        name_exp (str): The name of the experiment.
+        date_folder (str): The date folder.
+        bbox (list): The bounding box coordinates [lon_min, lon_max, lat_min, lat_max].
+        snap_time (datetime): The snapshot time.
+        bfn_map (xr.Dataset, optional): The BFN map dataset. If not provided, it is loaded from a default path.
+        duacs_map_crop (xr.Dataset, optional): The cropped DUACS map dataset. If not provided, it is loaded from a default path.
+
+    Returns:
+        None
+
+    The function creates a comparison plot of DUACS and BFN maps for the specified snapshot time. It opens the necessary
+    datasets, sets up the figure and subplots, and formats the axis maps. The resulting plot is displayed.
+    """
+
+    if bfn_map is None:
+        bfn_map = xr.open_mfdataset('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT-BFN-v2/maps_'+name_exp+'/'+date_folder+'/*.nc', combine='nested', concat_dim = 'time')
+        duacs_map = xr.open_mfdataset('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT-BFN-v2/input_'+name_exp+'/'+date_folder+'/dataset-duacs-nrt-global-merged-allsat-phy-l4/*.nc', combine='nested', concat_dim = 'time')
+        duacs_map_crop = duacs_map.where((duacs_map['longitude']>bbox[0]) & (duacs_map['longitude']<bbox[1]) & (duacs_map['latitude']>bbox[2]) & (duacs_map['latitude']<bbox[3]),drop = True)
+    
+    duacs = duacs_map_crop.sel(time=to_datetime(snap_time), method = 'nearest')
+    bfn = bfn_map.sel(time=to_datetime(snap_time), method = 'nearest')
+    
+    fig, ((ax1, ax2),(ax3, ax4)) = plt.subplots(nrows=2, ncols=2, sharey=True, subplot_kw={'projection': ccrs.PlateCarree()},dpi=300)
+
+    cmap_range_ssh = np.nanmax([np.nanmax(abs(duacs.adt.values)), np.nanmax(abs(bfn.ssh.values))])
+
+    ax1, map1 = format_axis_map(duacs.adt, ax1, duacs.longitude, duacs.latitude, colormap='RdBu_r', subplot_title='DUACS', cmap_range=[-cmap_range_ssh,cmap_range_ssh])
+    ax1.tick_params('x', labelbottom=False)
+    plt.colorbar(map1, shrink = 0.4, orientation = 'vertical', label = 'ADT (m)', ax=ax1)
+
+    ax2, map2 = format_axis_map(bfn.ssh, ax2, bfn.lon, bfn.lat, colormap='RdBu_r', subplot_title='BFN-QG', cmap_range=[-cmap_range_ssh,cmap_range_ssh])
+    ax2.tick_params('y', labelleft=False)
+    ax2.tick_params('x', labelbottom=False)
+    plt.colorbar(map2, shrink = 0.4, orientation = 'vertical', label = 'ADT (m)', ax=ax2)
+
+    cmap_range_uv = np.nanmax([np.nanmax(np.sqrt(duacs.ugos.values**2+duacs.vgos.values**2)), np.nanmax(np.sqrt(bfn.u.values**2+bfn.v.values**2))])
+
+    ax3, map3 = format_axis_map(np.sqrt(duacs.ugos**2+duacs.vgos**2), ax3, duacs.longitude, duacs.latitude, colormap='viridis', subplot_title='', cmap_range=[0,cmap_range_uv])
+    ax3.tick_params('x', labelrotation=45)
+    plt.colorbar(map3, shrink = 0.4, orientation = 'vertical', label = 'sqrt(u²+v²) (m/s)', ax=ax3)
+    
+
+    ax4, map4 = format_axis_map(np.sqrt(bfn.u**2+bfn.v**2), ax4, bfn.lon, bfn.lat, colormap='viridis', subplot_title='', cmap_range=[0,cmap_range_uv])
+    ax4.tick_params('y', labelleft=False)
+    ax4.tick_params('x', labelrotation=45)
+    plt.colorbar(map4, shrink = 0.4, orientation = 'vertical', label = 'sqrt(u²+v²) (m/s)', ax=ax4)
+
+    fig.suptitle('Surface elevation & norm of geostrophic velocity, '+snap_time.strftime('%Y-%m-%d'))
+    fig.tight_layout()
+
+def plot_duacs_comp (init_date, name_experiment, today, bbox, make_duacs_comp = 'today'):
+
+    """
+    Calls the function plotting the comparison between DUACS and BFN maps depending on the specified option.
+
+    Args:
+        init_date (datetime.date): The initial date.
+        name_experiment (str): The name of the experiment.
+        today (datetime.date): The current date.
+        bbox (list): The bounding box coordinates [lon_min, lon_max, lat_min, lat_max].
+        make_duacs_comp (str, optional): The type of DUACS comparison to make. Default is 'today'.
+
+    Returns:
+        None
+
+    The function plots the comparison between DUACS and BFN maps based on the specified options. If 'make_duacs_comp'
+    is set to 'today', it calls the 'make_comp_plot' function for the current date. If set to 'interactive', it allows
+    for interactive selection of a specific date to compare. If set to 'none', no DUACS comparison is made. Otherwise,
+    if a specific date is provided in 'YYYY-MM-DD' format, it calls the 'make_comp_plot' function for that date.
+    """
+
+    if make_duacs_comp == 'today':
+        from tools.plot_tools import make_comp_plot
+        make_comp_plot(name_experiment, today.strftime('%Y%m%d'), bbox, today)
+        plt.savefig('./maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/DUACS_L4_comp_'+today.strftime('%Y%m%d')+'.png',bbox_inches='tight')
+
+    elif make_duacs_comp == 'interactive':
+        from tools.plot_tools import make_comp_plot
+        import ipywidgets
+        from numpy import arange
+        from pandas import to_datetime
+        from xarray import open_mfdataset
+
+        dates_series = to_datetime(arange(init_date,today+timedelta(days=1),timedelta(days=1)))
+        bfn_map = open_mfdataset('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT-BFN-v2/maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/*.nc', combine='nested', concat_dim = 'time')
+        duacs_map = open_mfdataset('/bettik/PROJECTS/pr-data-ocean/stellaa/NRT-BFN-v2/input_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/dataset-duacs-nrt-global-merged-allsat-phy-l4/*.nc', combine='nested', concat_dim = 'time')
+        duacs_map_crop = duacs_map.where((duacs_map['longitude']>bbox[0]) & (duacs_map['longitude']<bbox[1]) & (duacs_map['latitude']>bbox[2]) & (duacs_map['latitude']<bbox[3]),drop = True)
+
+        def plot_interactive_comp(i):
+            make_comp_plot(name_exp=name_experiment, date_folder=today.strftime('%Y%m%d'), bbox=bbox, snap_time=dates_series[i], bfn_map=bfn_map, duacs_map_crop=duacs_map_crop)
+
+        w = ipywidgets.interactive(plot_interactive_comp, i=(0, len(dates_series)-1))
+        display(w)
+    elif make_duacs_comp == 'none':
+        print('No duacs comparaison requested')
+
+    else:
+        try:
+            from tools.plot_tools import make_comp_plot
+            from datetime import datetime, date, time
+            plot_date = datetime.combine(date.fromisoformat(make_duacs_comp), time())
+            make_comp_plot(name_experiment, today.strftime('%Y%m%d'), bbox, plot_date)
+            plt.savefig('./maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/DUACS_L4_comp_'+plot_date.strftime('%Y%m%d')+'.png',bbox_inches='tight')
+        except ValueError:
+            print("invalid value for make_duacs_comp. Choose from 'today', 'interactive', 'none', or a date in 'YYYY-MM-DD' format.")

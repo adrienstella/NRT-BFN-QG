@@ -1,10 +1,14 @@
-# This script is made to be automatically ran every day to produce ocean maps in near real-time
-# It downloads the latest data based on today's date from the CMEMS FTP server into the inputs folder,
-# then runs the BFN-QG algorithm in MASSH to assimilate this data into a dynamical model and create SSH maps for every 3 hours.
-# Finally, the program averages these values for each day and derives the geostrophic velocities and 
-# normalized relative vorticity from the daily SSH, which it saves as .nc files.
-# Lagragian diagnostics are run using the LOCEAN Lamta algorithm.
-# Finally, everything is sent to external FTP servers for access by end users. 
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Description: A script to produce high-resolution ocean topography maps using the BFN-QG data assimilation method (F. Le Guillou).
+This algorithm takes care of downloading the input observations, pre-processing the boundary conditions, plotting the data to be used,
+performing the assimilation using MASSH, processing results, making various diagnostics on the output, and sending the maps 
+and results to an external FTP server. It can be used both for near-real-time and reanalysis applications.
+
+Author: adrienstella
+Date: 2023-07-19
+"""
 
 import os
 from datetime import timedelta
@@ -16,10 +20,10 @@ destination = None # Available options : 'ifremer',
 make_lagrangian_diags = False # True or False
 draw_L3 = True # True or False
 make_alongtrack_rmse = True # True or False
+make_duacs_comp = 'interactive' # Available options: 'today', 'YYYY-MM-DD' (choose a date), 'interactive', 'none'
 
 dir_massh = '../MASSH/mapping'
 path_config = './NRT_BFN_main_config.py' 
-
 
 ###########################################################################################################################################
 ###  0. INITIALIZATION
@@ -66,6 +70,7 @@ dataset_l4 = 'dataset-duacs-nrt-global-merged-allsat-phy-l4'
 # FTP connection to CMEMS server and observational data download
 download_nadirs_cmems(name_experiment, currdir, today, numdays, datasets, dataset_l4)
 download_swot_nadir(name_experiment, currdir, today)
+
 # If needed, download and properly formats mdt file
 make_mdt(name_experiment, currdir,bbox)
 
@@ -91,7 +96,7 @@ from src import state as state
 State = state.State(config)
 
 # Obs
-from src import obs as obs # if no files to open, re-download data
+from src import obs as obs
 dict_obs = obs.Obs(config,State)
 
 if draw_L3 == True:
@@ -127,27 +132,32 @@ from tools.processing import nc_processing
 nc_processing(name_experiment, today=today, numdays=6)
 
 ##############################################################################################################################
-### 5. ALONGTRACK OBS COMPARISON
+### 5. DIAGNOSTICS
 ##############################################################################################################################
+
+##### 5.1 DUACS COMPARISON
+
+from tools.plot_tools import plot_duacs_comp
+plot_duacs_comp(config.EXP.init_date, name_experiment, today, bbox, make_duacs_comp)
+
+##### 5.2 ALONGTRACK OBS COMPARISON
 
 if make_alongtrack_rmse == True:
     from tools.plot_tools import plot_alongtrack_rmse, plot_25_random_tracks
     plot_25_random_tracks('./scratch/'+name_experiment+'/', name_experiment, today.strftime('%Y%m%d'))
     plot_alongtrack_rmse('./scratch/'+name_experiment+'/', name_experiment, today.strftime('%Y%m%d'))
 
-#######################################################################################
-### 6. LAMTA LAGRANGIAN DIAGNOSTICS
-#######################################################################################
+
+##### 5.3 LAMTA LAGRANGIAN DIAGNOSTICS
 
 if make_lagrangian_diags == True:
     dir_lamta = '/bettik/PROJECTS/pr-data-ocean/stellaa/lamtaLR'
-    from tools.remapping import apply_lamta
+    from tools.processing import apply_lamta
     lamta_diags_results = apply_lamta(name_experiment, currdir, dir_lamta, today, bbox, numdays=30, bathylvl =-1000)
 
 ###########################################################################################################################################
-### 7. MAPS UPLOAD
+### 6. MAPS UPLOAD
 ###########################################################################################################################################
-# Here, choose the right function to send to the right place. 
 
 if destination == 'ifremer':
     from tools.ftp_transfer import ftp_to_ifremer

@@ -36,6 +36,7 @@ See example/ for an example notebook with figures.
 ##### In the configuration file:
 - *final_date*: final date for assimilation (default = current computer day and time, for NRT. Can be changed for reanalysis mode)
 - *numdays*: number of days of assimilation to run before final date
+- *name_experiment*: suffix given to the subfolders for that experiment
 - *lon_min*, *lon_max*, *lat_min*, *lat_max*: spatial domain
 - *dlon*, *dlat*: spatial resolution (recommended 1/16°, or 1/8° for a large domain)
 - *c0*: phase speed of baroclinic first mode (can be found here for example: https://ceoas.oregonstate.edu/rossby_radius)
@@ -52,21 +53,21 @@ See example/ for an example notebook with figures.
 ### Installation
 :computer: _**How to get started ?**_
 
-(a) Clone this repo: 
+a) Clone this repo: 
 ```
 git clone https://github.com/adrienstella/NRT-BFN-QG.git
 ```
-(b) Clone the MASSH repo in the same place:
+b) Clone the MASSH repo in the same place:
 ```
 git clone https://github.com/leguillf/MASSH.git
 ```
-(c) Check paths match your configuration in the main script
+c) Check paths match your configuration in the main script
 
-(d) Enter your usernames and passwords for the FTP servers (create your own secretcodes.py file with your cmems / aviso accounts).
+d) Enter your usernames and passwords for the FTP servers (create your own secretcodes.py file with your cmems / aviso accounts).
 
-(e) Create your own experiment by making a copy of the NRT_BFN_main_config.py file and adjusting the parameters to fit your needs. Don't forget to point to that new config file in the main script's 'path_config' variable.
+e) Create your own experiment by making a copy of the NRT_BFN_main_config.py file and adjusting the parameters to fit your needs. Don't forget to point to that new config file in the main script's 'path_config' variable.
 
-(f) From your local NRT-BFN-QG folder, create the dedicated environment by running the following command (recommended, requires Anaconda):
+f) From your local NRT-BFN-QG folder, create the dedicated environment by running the following command (recommended, requires Anaconda):
 ```
 conda env create -f nrt_bfn_env.yml
 ```

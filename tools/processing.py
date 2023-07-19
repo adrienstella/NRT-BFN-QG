@@ -72,22 +72,26 @@ def compute_filled_map(BC_data_path, save_to, bbox):
     ds.to_netcdf(save_to, mode = 'w')
 
 
-def nc_processing(name_experiment, today, numdays = 6):
-
+def compute_u_v_rv(ssh_map):
+        
     """
-    Performs netCDF processing for the given experiment and time period.
+    Computes U, V, and RV (Relative Vorticity) based on the given sea surface height map.
 
     Args:
-        name_experiment (str): The name of the experiment.
-        today (datetime.date): The current date.
-        numdays (int): The number of days to consider for processing. Default is 6.
+        ssh_map (xarray.Dataset): Sea surface height map containing the 'ssh' variable with dimensions (time, lat, lon).
 
     Returns:
-        None
+        xarray.Dataset: The input dataset with additional variables 'u', 'v', and 'xi_norm' computed based on the SSH map.
 
-    The function performs netCDF processing for the specified experiment and time period. It opens the output files
-    from the experiment, calculates the daily mean sea surface height (SSH), and computes additional variables such
-    as U, V, and PV. The processed data is saved as netCDF files.
+    The function computes the U (eastward velocity), V (northward velocity), and RV (Relative Vorticity) fields using the
+    sea surface height (SSH) map. It calculates the necessary physical parameters, such as dy, dx, and f, based on the
+    geographical grid of the SSH map. Then, it iterates over each time step in the SSH map to compute the U, V, and RV fields.
+
+    The computed U, V, and RV fields are added as additional variables 'u', 'v', and 'xi_norm' to the input SSH map dataset,
+    respectively. The resulting dataset is returned.
+
+    Note:
+        - The 'ssh_map' dataset must have the 'ssh' variable with dimensions (time, lat, lon).
     """
 
     # A few physical parameters for computations
@@ -95,15 +99,9 @@ def nc_processing(name_experiment, today, numdays = 6):
     earth_rad=6.371e6 # 6371km
     earth_w=2*np.pi/86400 # rad/s
 
-    # Load the last week and take daily averages
-    bfn_output = xr.open_mfdataset('./output_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/*.nc', concat_dim='time', combine='nested')
-    bfn_output_dates = bfn_output.assign(time=to_datetime(bfn_output.time.dt.date))
-    interest_period = bfn_output_dates.where(bfn_output_dates.time >= to_datetime(today-timedelta(days=numdays)), drop =True)
-    daily_mean_ssh = interest_period.groupby("time").mean("time")
-
     # Create the dy, dx and f grids based on physical parameters
-    lon=daily_mean_ssh.lon.values
-    lat=daily_mean_ssh.lat.values
+    lon=ssh_map.lon.values
+    lat=ssh_map.lat.values
     x, y = np.meshgrid(lon, lat)
 
     dy = np.ones(y.shape)
@@ -120,30 +118,83 @@ def nc_processing(name_experiment, today, numdays = 6):
 
     f=2*earth_w*np.sin(y*np.pi/180)
 
-    # U, V & PV computation
-    u=np.zeros((len(daily_mean_ssh.time), len(lat), len(lon)))
-    v=np.zeros((len(daily_mean_ssh.time), len(lat), len(lon)))
-    xi_norm=np.zeros((len(daily_mean_ssh.time), len(lat), len(lon)))
+    # U, V & RV computation
+    u=np.zeros((len(ssh_map.time), len(lat), len(lon)))
+    v=np.zeros((len(ssh_map.time), len(lat), len(lon)))
+    xi_norm=np.zeros((len(ssh_map.time), len(lat), len(lon)))
 
     from tools.vars import h2uv, h2rv
 
-    for t in np.arange(len(daily_mean_ssh.time)):
-        (u[t, :, :], v[t, :, :]) = h2uv(ssh = daily_mean_ssh.ssh[t, :, :], dy = dy, dx = dx, g = g, f = f)
-        xi_norm[t, :, :] = h2rv(ssh = daily_mean_ssh.ssh[t, :, :], dy = dy, dx = dx, g = g, f = f)
+    for t in np.arange(len(ssh_map.time)):
+        (u[t, :, :], v[t, :, :]) = h2uv(ssh = ssh_map.ssh[t, :, :], dy = dy, dx = dx, g = g, f = f)
+        xi_norm[t, :, :] = h2rv(ssh = ssh_map.ssh[t, :, :], dy = dy, dx = dx, g = g, f = f)
 
-    daily_mean_ssh['u'] = (['time', 'lat', 'lon'],  u)
-    daily_mean_ssh['v'] = (['time', 'lat', 'lon'],  v)
-    daily_mean_ssh['xi_norm'] = (['time', 'lat', 'lon'],  xi_norm)
+    ssh_map['u'] = (['time', 'lat', 'lon'],  u)
+    ssh_map['v'] = (['time', 'lat', 'lon'],  v)
+    ssh_map['xi_norm'] = (['time', 'lat', 'lon'],  xi_norm)
+
+    return ssh_map
+
+
+def nc_processing(name_experiment, today, numdays = 6, frequency_hours = 24):
+
+    """
+    Performs netCDF processing for the given experiment and time period.
+
+    Args:
+        name_experiment (str): The name of the experiment.
+        today (datetime.date): The current date.
+        numdays (int, optional): The number of days to consider for processing. Default is 6.
+        frequency_hours (int, optional): The frequency in hours for time averaging. Default is 24.
+
+    Returns:
+        None
+
+    The function performs netCDF processing for the specified experiment and time period. It opens the output files
+    from the experiment, calculates the mean sea surface height (SSH), and computes additional variables such as U, V,
+    and PV. The processed data is saved as netCDF files.
+
+    If `frequency_hours` is set to 24 (default), the function calculates the daily mean SSH by grouping the data
+    by day and taking the mean. If `frequency_hours` is set to a different value, the function manually defines time
+    bins of the specified frequency and calculates the mean SSH within each bin. The resulting time bins are labeled
+    with the midpoints of each bin.
+    """
+    
+
+    # Load the interest period and make binned averages
+    bfn_output = xr.open_mfdataset('./output_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/*.nc', concat_dim='time', combine='nested')
+    interest_period = bfn_output.where(bfn_output.time >= to_datetime(today-timedelta(days=numdays)), drop =True)
+
+    interest_period = compute_u_v_rv(interest_period)
+
+    if frequency_hours == 24:
+        binned_ssh = interest_period.groupby("time").mean("time")
+    else:
+        from pandas import date_range
+        #Manually define the bins we want to use for time averaging
+        time_averaging_bins = date_range(start=to_datetime(today-timedelta(days=numdays)), end=today, freq=timedelta(hours=frequency_hours))
+        
+        #Group our DataArray by these bins
+        time_midpoints = date_range(start=to_datetime(today-timedelta(days=numdays))+timedelta(hours=frequency_hours)/2, end=today, freq=timedelta(hours=frequency_hours))
+        binned_ssh = interest_period.groupby_bins(group='time', bins=time_averaging_bins, labels=time_midpoints).mean('time')
+        binned_ssh = binned_ssh.rename({'time_bins': 'time'})
+
 
     # Save final netcdf files - this can be adapted depending on the needs of the receiver (variable names, how many files, etc.)
     os.makedirs('./maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/', exist_ok = True)
     os.makedirs('./maps_'+name_experiment+'/full_timeseries/', exist_ok = True)
-    for d in daily_mean_ssh.time.values:
+
+    if frequency_hours == 24:
+        format = '%Y%m%d'
+    else:
+        format = '%Y%m%d-%H'
+        
+    for d in binned_ssh.time.values:
         date = to_datetime(d)
-        ds=daily_mean_ssh.where(daily_mean_ssh.time == d, drop=True)
-        ds.to_netcdf('./maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/NRT_BFN_'+date.strftime('%Y%m%d')+'.nc', mode = 'w') # Store in daily folder
+        ds=binned_ssh.where(binned_ssh.time == d, drop=True)
+        ds.to_netcdf('./maps_'+name_experiment+'/'+today.strftime('%Y%m%d')+'/NRT_BFN_'+date.strftime(format)+'.nc', mode = 'w') # Store in daily folder
         ds_renamed = ds.rename({'lon': 'longitude','lat': 'latitude', 'u': 'ugos', 'v': 'vgos'})
-        ds_renamed.to_netcdf('./maps_'+name_experiment+'/full_timeseries/BFN_lamta_'+date.strftime('%Y%m%d')+'.nc', mode = 'w') # Store in global product for diagnostics
+        ds_renamed.to_netcdf('./maps_'+name_experiment+'/full_timeseries/BFN_lamta_'+date.strftime(format)+'.nc', mode = 'w') # Store in global product for diagnostics
 
 
 import sys

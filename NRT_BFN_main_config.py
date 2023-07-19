@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jan  6 19:20:42 2021
 
 @author: leguillou
 
-modified by Adrien Stella
-from config_2020a_BFNQG.py
+modified by Adrien Stella on 2023-07-19 from the MASSH example config_2020a_BFNQG.py
 """
 
 #################################################################################################################################
