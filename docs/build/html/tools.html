@@ -1,0 +1,640 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>tools package &#8212; nrt-bfn-qg 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="NRT_BFN_main_config module" href="NRT_BFN_main_config.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="NRT_BFN_main_config.html" title="NRT_BFN_main_config module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">nrt-bfn-qg 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">tools package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="tools-package">
+<h1>tools package<a class="headerlink" href="#tools-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-tools.ftp_transfer">
+<span id="tools-ftp-transfer-module"></span><h2>tools.ftp_transfer module<a class="headerlink" href="#module-tools.ftp_transfer" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.ftp_transfer.download_mdt">
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">download_mdt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_mdt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.download_mdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads Mean Dynamic Topography (MDT) data from the CMEMS FTP server for a specific experiment.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
+currdir (str): The current working directory.
+dataset_mdt (str): The name of the MDT dataset to download.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function connects to the CMEMS FTP server using the provided credentials and downloads the Mean
+Dynamic Topography (MDT) dataset to the specified experiment’s input folder.</p>
+<dl class="simple">
+<dt>Note:</dt><dd><ul class="simple">
+<li><p>The ‘secretcodes’ module must contain the ‘cmems_username’ and ‘cmems_password’ variables
+with the appropriate FTP credentials.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.ftp_transfer.download_nadirs_cmems">
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">download_nadirs_cmems</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_l4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.download_nadirs_cmems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads nadir data from the CMEMS FTP server for a specific experiment.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
+currdir (str): The current working directory.
+today (datetime.datetime): The current experiment date.
+numdays (int): The minimum number of days to go back for data download.
+datasets (list): A list of dataset names to download (alongtrack data).
+dataset_l4 (str): The name of the L4 dataset to download.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function connects to the CMEMS FTP server using the provided credentials and downloads nadir
+data for the specified datasets. It creates the necessary directories to store the downloaded data
+within the experiment’s input folder. It then iterates over the months starting from the
+current month and goes back as many months as needed to cover ‘numdays’.</p>
+<dl class="simple">
+<dt>Note:</dt><dd><ul class="simple">
+<li><p>The ‘secretcodes’ module must contain the ‘cmems_username’ and ‘cmems_password’ variables
+with the appropriate FTP credentials.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.ftp_transfer.download_swot_nadir">
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">download_swot_nadir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.download_swot_nadir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads SWOT nadir L3 data from AVISO for a specific experiment.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
+currdir (str): The current working directory.
+today (datetime.datetime): The current date.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function connects to the AVISO FTP server using the provided credentials and downloads SWOT nadir
+L3 data for the specified experiment. It retrieves the list of available filenames from the FTP server.
+It iterates over the filenames and downloads each file using the ‘retrbinary’ command. Then, it selects
+the most recent version of the data for each available observation date.</p>
+<dl class="simple">
+<dt>Note:</dt><dd><ul class="simple">
+<li><p>The ‘secretcodes’ module must contain the ‘swot_username’ and ‘swot_password’ variables with
+the appropriate FTP credentials.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.ftp_transfer.ftp_cmems_download_month">
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">ftp_cmems_download_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.ftp_cmems_download_month" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download all data files in a month repository on an ftp server</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ftp (ftp object): FTP connexion
+product_path (string): Name of product to download
+dataset (string): Name of dataset to download within product
+year (string): year of data to download
+month (string): month of data to download</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.ftp_transfer.ftp_to_ifremer">
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">ftp_to_ifremer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.ftp_to_ifremer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uploads files to the IFREMER FTP server for a specific experiment.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
+today (datetime.datetime): The current experiment date.
+currdir (str): The current working directory.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function connects to the IFREMER FTP server using the provided credentials and navigates to
+the ‘MEDSSH_BFN’ directory. It creates a subdirectory with the current date in the ‘MEDSSH_BFN’
+directory, then, it calls the ‘place_files’ function to upload the files to the FTP server.
+Finally, it closes the FTP connection.</p>
+<dl class="simple">
+<dt>Note:</dt><dd><ul class="simple">
+<li><p>The ‘secretcodes’ module must contain the ‘ifremer_username’ and ‘ifremer_password’ variables
+with the appropriate FTP credentials.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.ftp_transfer.place_files">
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">place_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.place_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uploads all files and subfolders in the given path to the directory connected to the FTP server.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ftp (ftplib.FTP): An FTP object, already connected to the target directory.
+path (str): The local path to the directory containing files and subfolders to upload.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+<dt>Raises:</dt><dd><p>ftplib.error_perm: If there is an error during FTP operations.</p>
+</dd>
+</dl>
+<p>The function iterates over the files and subfolders in the specified local path. For each file,
+it uploads the file to the connected FTP directory using the STOR command. For each subfolder,
+it creates a corresponding directory on the FTP server using the MKD command. The function then
+recursively calls itself for each subfolder to upload its contents.</p>
+</dd></dl>
+
+</section>
+<section id="module-tools.plot_tools">
+<span id="tools-plot-tools-module"></span><h2>tools.plot_tools module<a class="headerlink" href="#module-tools.plot_tools" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.plot_tools.format_axis_map">
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">format_axis_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colormap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplot_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.format_axis_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Formats and displays a map with data on the specified axes.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>data (array-like): The data to be plotted on the map.
+axes (matplotlib.axes.Axes): The axes on which to plot the map.
+longitudes (array-like): The array of longitude values.
+latitudes (array-like): The array of latitude values.
+bbox (list): Optional. The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat]. If not provided, the extent is automatically determined from the longitudes and latitudes. Default is None.
+colormap (str): Optional. The colormap to be used for the data. Default is ‘RdBu_r’.
+subplot_title (str): The title of the subplot.
+cmap_range (float or list or tuple): Optional. The range of values for the colormap. If a single float is provided, it is used as both vmin and vmax. If a list or tuple is provided, it should contain the vmin and vmax values. If not provided, the maximum absolute value of the data is used.</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple: A tuple containing the formatted axes and the map object.</p>
+</dd>
+</dl>
+<p>The function takes the data, axes, longitudes, and latitudes as inputs and plots the data on the specified
+axes as a map. The map is formatted with the specified colormap, subplot title, and color range. The bounding
+box can be explicitly provided or automatically determined from the longitudes and latitudes. The function
+returns a tuple containing the formatted axes and the map object.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.plot_tools.format_axis_quiver">
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">format_axis_quiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplot_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.format_axis_quiver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Formats and displays a quiver plot on the specified axes.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>data_x (array-like): The x-component of the vector data.
+data_y (array-like): The y-component of the vector data.
+axes (matplotlib.axes.Axes): The axes on which to plot the quiver plot.
+longitudes (array-like): The array of longitude values.
+latitudes (array-like): The array of latitude values.
+bbox (list): Optional. The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat]. If not provided, the extent is automatically determined from the longitudes and latitudes. Default is None.
+subplot_title (str): The title of the subplot.</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple: A tuple containing the formatted axes and the quiver plot object.</p>
+</dd>
+</dl>
+<p>The function takes the x-component, y-component, axes, longitudes, and latitudes as inputs and plots a quiver
+plot on the specified axes. The quiver plot represents the vector data using arrows. The plot is formatted with
+the specified subplot title and bounding box. The bounding box can be explicitly provided or automatically
+determined from the longitudes and latitudes. The function returns a tuple containing the formatted axes and the
+quiver plot object.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.plot_tools.make_comp_plot">
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">make_comp_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snap_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bfn_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duacs_map_crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.make_comp_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a comparison plot of DUACS and BFN maps for a given snapshot time.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name_exp (str): The name of the experiment.
+date_folder (str): The date folder.
+bbox (list): The bounding box coordinates [lon_min, lon_max, lat_min, lat_max].
+snap_time (datetime): The snapshot time.
+bfn_map (xr.Dataset, optional): The BFN map dataset. If not provided, it is loaded from a default path.
+duacs_map_crop (xr.Dataset, optional): The cropped DUACS map dataset. If not provided, it is loaded from a default path.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function creates a comparison plot of DUACS and BFN maps for the specified snapshot time. It opens the necessary
+datasets, sets up the figure and subplots, and formats the axis maps. The resulting plot is displayed.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.plot_tools.plot_25_random_tracks">
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_25_random_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_25_random_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots 25 randomly chosen observation tracks along with map data.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>input_path (str): The path to the observation tracks.
+name_exp (str): The name of the experiment.
+date_folder (str): The date folder.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function opens the necessary map datasets and selects 25 random observation tracks. It plots each observation
+track along with the corresponding map data. The figures are displayed but not returned.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.plot_tools.plot_alongtrack_rmse">
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_alongtrack_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_alongtrack_rmse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the RMSE between maps and observation tracks.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>input_path (str): The path to the observation tracks.
+name_exp (str): The name of the experiment.
+date_folder (str): The date folder.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function opens the necessary map datasets and observation tracks. It calculates the RMSE between the maps and
+observation tracks and plots the results. The figures are displayed but not returned.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.plot_tools.plot_diags_no_sst">
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_diags_no_sst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diags_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bathylvl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.12,</span> <span class="pre">0.12,</span> <span class="pre">0.35]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.6,</span> <span class="pre">1.6,</span> <span class="pre">1.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./maps/'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_diags_no_sst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots Lamta diagnostic results.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>diags_results: The diagnostic results object (made using Louise Rousslet’s algorithm).
+bbox (list): The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
+today (datetime.datetime): The current date.
+bathylvl (float): The bathymetry level.
+crop (str): Optional. Crop parameter for the figure filenames. Default is an empty string.
+s_factor (list): Optional. The scale factors for colorbar size. Default is [0.12, 0.12, 0.35].
+title_adjust (list): Optional. The top adjustment values for the figure suptitles. Default is [1.6, 1.6, 1.5].
+save_folder (str): Optional. The folder path to save the figures. Default is ‘./maps/’.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function plots Lamta diagnostic results. It generates three sets of subplots for different diagnostic results.
+Each subplot is formatted with the specified colormap, title, color range, and colorbar label.
+The figures are saved and displayed but not returned.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.plot_tools.plot_duacs_comp">
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_duacs_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">make_duacs_comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'today'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_duacs_comp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls the function plotting the comparison between DUACS and BFN maps depending on the specified option.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>init_date (datetime.date): The initial date.
+name_experiment (str): The name of the experiment.
+today (datetime.date): The current date.
+bbox (list): The bounding box coordinates [lon_min, lon_max, lat_min, lat_max].
+make_duacs_comp (str, optional): The type of DUACS comparison to make. Default is ‘today’.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function plots the comparison between DUACS and BFN maps based on the specified options. If ‘make_duacs_comp’
+is set to ‘today’, it calls the ‘make_comp_plot’ function for the current date. If set to ‘interactive’, it allows
+for interactive selection of a specific date to compare. If set to ‘none’, no DUACS comparison is made. Otherwise,
+if a specific date is provided in ‘YYYY-MM-DD’ format, it calls the ‘make_comp_plot’ function for that date.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.plot_tools.plot_l3_data">
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_l3_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_l3_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the spatial and temporal distribution of L3 data used in the experiment.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>bbox (list): The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
+datasets (list): A list of dataset names.
+today (datetime.datetime): The current date.
+numdays (int): The number of days to consider.
+name_exp (str): The name of the experiment.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function plots the spatial and temporal distribution of L3 data for each dataset in the given list. It generates
+two sets of subplots: one for spatial distribution and one for temporal distribution. Each subplot is formatted with
+the specified colormap, color range, and colorbar. The figures are saved and displayed but not returned.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.plot_tools.show_ssh_ug_xinorm">
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">show_ssh_ug_xinorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snapshot_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.show_ssh_ug_xinorm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a figure with three subplots showing sea surface height, velocity norm, and relative vorticity data.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ds (xarray.Dataset): The dataset containing the required variables.
+bbox (list): The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
+snapshot_time (datetime.datetime): The time snapshot to display.
+title (str): The title of the figure.
+s_factor (float): Optional. The scale factor for colorbar size. Default is 0.12.
+title_adjust (float): Optional. The top adjustment value for the figure suptitle. Default is 1.6.</p>
+</dd>
+<dt>Returns:</dt><dd><p>matplotlib.figure.Figure: The created figure.</p>
+</dd>
+</dl>
+<p>The function takes a dataset, bounding box coordinates, snapshot time, title, and scaling parameters as inputs
+and displays a figure with three subplots. (a) sea surface height (SSH) or absolute dynamic
+topography (ADT) data, (b) velocity norm (Ug) data, (c) realtive vorticity (xi/f).
+Each subplot is formatted with the specified colormap, title, and color range. The function returns the created figure.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.plot_tools.show_ug_trio">
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">show_ug_trio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snapshot_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.show_ug_trio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a figure with three subplots showing velocity norm data from three datasets.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ds1 (xarray.Dataset): The first dataset.
+ds2 (xarray.Dataset): The second dataset.
+ds3 (xarray.Dataset): The third dataset.
+bbox (list): The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
+snapshot_time (datetime.datetime): The time snapshot to display.
+title (str): The title of the figure.
+s_factor (float): Optional. The scale factor for colorbar size. Default is 0.12.
+title_adjust (float): Optional. The top adjustment value for the figure suptitle. Default is 1.6.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function takes three datasets, a bounding box, snapshot time, title, and scaling parameters as inputs and
+displays a figure with three subplots. Each subplot shows the velocity norm (Ug) data from the respective dataset.
+Each subplot is formatted with the specified colormap, title, and color range.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.plot_tools.where_is_this">
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">where_is_this</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.where_is_this" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a map showing the specified bounding box.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>bbox (list): A list containing the bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
+pad (float): Optional. The padding value in degrees to extend the bounding box. Default is 4.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function creates a map using Matplotlib and Cartopy to display the specified bounding box. The map is centered
+on the bounding box with a given padding value.</p>
+</dd></dl>
+
+</section>
+<section id="module-tools.processing">
+<span id="tools-processing-module"></span><h2>tools.processing module<a class="headerlink" href="#module-tools.processing" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.processing.apply_lamta">
+<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">apply_lamta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_lamta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bathylvl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.apply_lamta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the Lagrangian Analysis of Mixing and Tracer Advection (LAMTA) algorithm to the given experiment.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
+currdir (str): The current directory.
+dir_lamta (str): The directory of the LAMTA algorithm.
+today (datetime.date): The current date.
+bbox (list): The bounding box coordinates [lon_min, lon_max, lat_min, lat_max].
+numdays (int): The number of days to consider. Default is 30.
+delta0 (float): The initial distance between particles (°). Default is 0.02.
+step (int): The number of integration steps per day. Default is 4.
+bathylvl (int): The bathymetry level from which to study particles resurfacing. Default is -500.</p>
+</dd>
+<dt>Returns:</dt><dd><p>xr.Dataset: The Lagrangian diagnostic results.</p>
+</dd>
+</dl>
+<p>The function applies the LAMTA algorithm to the given experiment. It loads the required modules and data,
+performs the LAMTA analysis, and saves the Lagrangian diagnostic results. Additionally, it generates and saves
+various plots related to the analysis.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.processing.compute_filled_map">
+<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">compute_filled_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BC_data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.compute_filled_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes and saves the filled map based on the provided boundary condition data.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>BC_data_path (str): The path to the boundary condition data.
+save_to (str): The path to save the filled map.
+bbox (list): The bounding box coordinates [lon_min, lon_max, lat_min, lat_max].</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function opens the boundary condition data and subsets it to the specified bounding box. It then computes the
+filled map using the Gaussian Seidel method and saves the result to the specified location. The point of this operation
+is that the filled map can be masked by a different resolution land mask without having ill-valued pixels at coastlines.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.processing.compute_u_v_rv">
+<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">compute_u_v_rv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh_map</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.compute_u_v_rv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes U, V, and RV (Relative Vorticity) based on the given sea surface height map.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ssh_map (xarray.Dataset): Sea surface height map containing the ‘ssh’ variable with dimensions (time, lat, lon).</p>
+</dd>
+<dt>Returns:</dt><dd><p>xarray.Dataset: The input dataset with additional variables ‘u’, ‘v’, and ‘xi_norm’ computed based on the SSH map.</p>
+</dd>
+</dl>
+<p>The function computes the U (eastward velocity), V (northward velocity), and RV (Relative Vorticity) fields using the
+sea surface height (SSH) map. It calculates the necessary physical parameters, such as dy, dx, and f, based on the
+geographical grid of the SSH map. Then, it iterates over each time step in the SSH map to compute the U, V, and RV fields.</p>
+<p>The computed U, V, and RV fields are added as additional variables ‘u’, ‘v’, and ‘xi_norm’ to the input SSH map dataset,
+respectively. The resulting dataset is returned.</p>
+<dl class="simple">
+<dt>Note:</dt><dd><ul class="simple">
+<li><p>The ‘ssh_map’ dataset must have the ‘ssh’ variable with dimensions (time, lat, lon).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.processing.make_mdt">
+<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">make_mdt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_mdt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mdt_hybrid_cnes_cls18_cmems2020_global.nc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.make_mdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the Mean Dynamic Topography (MDT) file is available for a given experiment, and creates it if needed.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
+currdir (str): The current directory.
+bbox (list): The bounding box coordinates [lon_min, lon_max, lat_min, lat_max].
+dataset_mdt (str): The dataset MDT filename.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function checks if the local MDT file exists. If not, it downloads the MDT file and creates a local copy
+within the experiment directory. The MDT is then subsetted to the specified bounding box.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.processing.nc_processing">
+<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">nc_processing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_hours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.nc_processing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs netCDF processing for the given experiment and time period.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
+today (datetime.date): The current date.
+numdays (int, optional): The number of days to consider for processing. Default is 6.
+frequency_hours (int, optional): The frequency in hours for time averaging. Default is 24.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+<p>The function performs netCDF processing for the specified experiment and time period. It opens the output files
+from the experiment, calculates the mean sea surface height (SSH), and computes additional variables such as U, V,
+and PV. The processed data is saved as netCDF files.</p>
+<p>If <cite>frequency_hours</cite> is set to 24 (default), the function calculates the daily mean SSH by grouping the data
+by day and taking the mean. If <cite>frequency_hours</cite> is set to a different value, the function manually defines time
+bins of the specified frequency and calculates the mean SSH within each bin. The resulting time bins are labeled
+with the midpoints of each bin.</p>
+</dd></dl>
+
+</section>
+<section id="module-tools.vars">
+<span id="tools-vars-module"></span><h2>tools.vars module<a class="headerlink" href="#module-tools.vars" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.vars.h2pv">
+<span class="sig-prename descclassname"><span class="pre">tools.vars.</span></span><span class="sig-name descname"><span class="pre">h2pv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.vars.h2pv" title="Permalink to this definition">¶</a></dt>
+<dd><p>SSH to Q</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>h (2D array): SSH field.
+c (2D array): Phase speed of first baroclinic radius
+dy (2D array): Height of grid points
+dx (2D array): Width of grid points
+f (2D array): Coriolis parameter
+g (scalar): Acceleration of gravity (m.s-2)</p>
+</dd>
+<dt>Returns:</dt><dd><p>q: Potential Vorticity field</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.vars.h2rv">
+<span class="sig-prename descclassname"><span class="pre">tools.vars.</span></span><span class="sig-name descname"><span class="pre">h2rv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.vars.h2rv" title="Permalink to this definition">¶</a></dt>
+<dd><p>SSH to Q</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>h (2D array): SSH field.
+dy (2D array): Height of grid points
+dx (2D array): Width of grid points
+f (2D array): Coriolis parameter
+g (scalar): Acceleration of gravity (m.s-2)</p>
+</dd>
+<dt>Returns:</dt><dd><p>xi_norm: Normalized relative vorticity field</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.vars.h2uv">
+<span class="sig-prename descclassname"><span class="pre">tools.vars.</span></span><span class="sig-name descname"><span class="pre">h2uv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ubc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vbc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.vars.h2uv" title="Permalink to this definition">¶</a></dt>
+<dd><p>SSH to U,V</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ssh (2D array): SSH field.
+dy (2D array): Height of grid points
+dx (2D array): Width of grid points
+f (2D array): Coriolis parameter
+g (scalar): Acceleration of gravity (m.s-2)</p>
+</dd>
+<dt>Returns:</dt><dd><p>u (2D array): Zonal velocity
+v (2D array): Meridional velocity</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-tools">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tools" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">tools package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-tools.ftp_transfer">tools.ftp_transfer module</a></li>
+<li><a class="reference internal" href="#module-tools.plot_tools">tools.plot_tools module</a></li>
+<li><a class="reference internal" href="#module-tools.processing">tools.processing module</a></li>
+<li><a class="reference internal" href="#module-tools.vars">tools.vars module</a></li>
+<li><a class="reference internal" href="#module-tools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="NRT_BFN_main_config.html"
+                          title="previous chapter">NRT_BFN_main_config module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tools.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="NRT_BFN_main_config.html" title="NRT_BFN_main_config module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">nrt-bfn-qg 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">tools package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Adrien Stella.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>
