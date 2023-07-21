@@ -1,57 +1,91 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-    <title>tools package &#8212; nrt-bfn-qg 1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
-    
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tools package &mdash; nrt-bfn-qg 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="NRT_BFN_main_config module" href="NRT_BFN_main_config.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="NRT_BFN_main_config.html" title="NRT_BFN_main_config module"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">nrt-bfn-qg 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">tools package</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> nrt-bfn-qg
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="NRT_BFN_main.html">NRT_BFN_main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NRT_BFN_main_config.html">NRT_BFN_main_config module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">tools package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tools.ftp_transfer">tools.ftp_transfer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tools.plot_tools">tools.plot_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tools.processing">tools.processing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tools.vars">tools.vars module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">nrt-bfn-qg</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">tools package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="tools-package">
-<h1>tools package<a class="headerlink" href="#tools-package" title="Permalink to this heading">¶</a></h1>
+<h1>tools package<a class="headerlink" href="#tools-package" title="Permalink to this heading"></a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-tools.ftp_transfer">
-<span id="tools-ftp-transfer-module"></span><h2>tools.ftp_transfer module<a class="headerlink" href="#module-tools.ftp_transfer" title="Permalink to this heading">¶</a></h2>
+<span id="tools-ftp-transfer-module"></span><h2>tools.ftp_transfer module<a class="headerlink" href="#module-tools.ftp_transfer" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.ftp_transfer.download_mdt">
-<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">download_mdt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_mdt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.download_mdt" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">download_mdt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_mdt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.download_mdt" title="Permalink to this definition"></a></dt>
 <dd><p>Downloads Mean Dynamic Topography (MDT) data from the CMEMS FTP server for a specific experiment.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
@@ -74,7 +108,7 @@ with the appropriate FTP credentials.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.ftp_transfer.download_nadirs_cmems">
-<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">download_nadirs_cmems</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_l4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.download_nadirs_cmems" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">download_nadirs_cmems</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_l4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.download_nadirs_cmems" title="Permalink to this definition"></a></dt>
 <dd><p>Downloads nadir data from the CMEMS FTP server for a specific experiment.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
@@ -102,7 +136,7 @@ with the appropriate FTP credentials.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.ftp_transfer.download_swot_nadir">
-<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">download_swot_nadir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.download_swot_nadir" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">download_swot_nadir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.download_swot_nadir" title="Permalink to this definition"></a></dt>
 <dd><p>Downloads SWOT nadir L3 data from AVISO for a specific experiment.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
@@ -127,7 +161,7 @@ the appropriate FTP credentials.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.ftp_transfer.ftp_cmems_download_month">
-<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">ftp_cmems_download_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.ftp_cmems_download_month" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">ftp_cmems_download_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.ftp_cmems_download_month" title="Permalink to this definition"></a></dt>
 <dd><p>Download all data files in a month repository on an ftp server</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>ftp (ftp object): FTP connexion
@@ -143,7 +177,7 @@ month (string): month of data to download</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.ftp_transfer.ftp_to_ifremer">
-<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">ftp_to_ifremer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.ftp_to_ifremer" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">ftp_to_ifremer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.ftp_to_ifremer" title="Permalink to this definition"></a></dt>
 <dd><p>Uploads files to the IFREMER FTP server for a specific experiment.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
@@ -168,7 +202,7 @@ with the appropriate FTP credentials.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.ftp_transfer.place_files">
-<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">place_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.place_files" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.ftp_transfer.</span></span><span class="sig-name descname"><span class="pre">place_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.ftp_transfer.place_files" title="Permalink to this definition"></a></dt>
 <dd><p>Uploads all files and subfolders in the given path to the directory connected to the FTP server.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>ftp (ftplib.FTP): An FTP object, already connected to the target directory.
@@ -187,10 +221,10 @@ recursively calls itself for each subfolder to upload its contents.</p>
 
 </section>
 <section id="module-tools.plot_tools">
-<span id="tools-plot-tools-module"></span><h2>tools.plot_tools module<a class="headerlink" href="#module-tools.plot_tools" title="Permalink to this heading">¶</a></h2>
+<span id="tools-plot-tools-module"></span><h2>tools.plot_tools module<a class="headerlink" href="#module-tools.plot_tools" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plot_tools.format_axis_map">
-<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">format_axis_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colormap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplot_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.format_axis_map" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">format_axis_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colormap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplot_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.format_axis_map" title="Permalink to this definition"></a></dt>
 <dd><p>Formats and displays a map with data on the specified axes.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>data (array-like): The data to be plotted on the map.
@@ -213,7 +247,7 @@ returns a tuple containing the formatted axes and the map object.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plot_tools.format_axis_quiver">
-<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">format_axis_quiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplot_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.format_axis_quiver" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">format_axis_quiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplot_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.format_axis_quiver" title="Permalink to this definition"></a></dt>
 <dd><p>Formats and displays a quiver plot on the specified axes.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>data_x (array-like): The x-component of the vector data.
@@ -236,7 +270,7 @@ quiver plot object.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plot_tools.make_comp_plot">
-<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">make_comp_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snap_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bfn_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duacs_map_crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.make_comp_plot" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">make_comp_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snap_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bfn_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duacs_map_crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.make_comp_plot" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a comparison plot of DUACS and BFN maps for a given snapshot time.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>name_exp (str): The name of the experiment.
@@ -255,7 +289,7 @@ datasets, sets up the figure and subplots, and formats the axis maps. The result
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plot_tools.plot_25_random_tracks">
-<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_25_random_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_25_random_tracks" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_25_random_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_25_random_tracks" title="Permalink to this definition"></a></dt>
 <dd><p>Plots 25 randomly chosen observation tracks along with map data.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>input_path (str): The path to the observation tracks.
@@ -271,7 +305,7 @@ track along with the corresponding map data. The figures are displayed but not r
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plot_tools.plot_alongtrack_rmse">
-<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_alongtrack_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_alongtrack_rmse" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_alongtrack_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_alongtrack_rmse" title="Permalink to this definition"></a></dt>
 <dd><p>Plots the RMSE between maps and observation tracks.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>input_path (str): The path to the observation tracks.
@@ -287,7 +321,7 @@ observation tracks and plots the results. The figures are displayed but not retu
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plot_tools.plot_diags_no_sst">
-<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_diags_no_sst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diags_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bathylvl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.12,</span> <span class="pre">0.12,</span> <span class="pre">0.35]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.6,</span> <span class="pre">1.6,</span> <span class="pre">1.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./maps/'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_diags_no_sst" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_diags_no_sst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diags_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bathylvl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.12,</span> <span class="pre">0.12,</span> <span class="pre">0.35]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.6,</span> <span class="pre">1.6,</span> <span class="pre">1.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./maps/'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_diags_no_sst" title="Permalink to this definition"></a></dt>
 <dd><p>Plots Lamta diagnostic results.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>diags_results: The diagnostic results object (made using Louise Rousslet’s algorithm).
@@ -309,7 +343,7 @@ The figures are saved and displayed but not returned.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plot_tools.plot_duacs_comp">
-<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_duacs_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">make_duacs_comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'today'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_duacs_comp" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_duacs_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">make_duacs_comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'today'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_duacs_comp" title="Permalink to this definition"></a></dt>
 <dd><p>Calls the function plotting the comparison between DUACS and BFN maps depending on the specified option.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>init_date (datetime.date): The initial date.
@@ -329,7 +363,7 @@ if a specific date is provided in ‘YYYY-MM-DD’ format, it calls the ‘make_
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plot_tools.plot_l3_data">
-<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_l3_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_l3_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">plot_l3_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_exp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.plot_l3_data" title="Permalink to this definition"></a></dt>
 <dd><p>Plots the spatial and temporal distribution of L3 data used in the experiment.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>bbox (list): The bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
@@ -348,7 +382,7 @@ the specified colormap, color range, and colorbar. The figures are saved and dis
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plot_tools.show_ssh_ug_xinorm">
-<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">show_ssh_ug_xinorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snapshot_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.show_ssh_ug_xinorm" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">show_ssh_ug_xinorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snapshot_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.show_ssh_ug_xinorm" title="Permalink to this definition"></a></dt>
 <dd><p>Displays a figure with three subplots showing sea surface height, velocity norm, and relative vorticity data.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>ds (xarray.Dataset): The dataset containing the required variables.
@@ -369,7 +403,7 @@ Each subplot is formatted with the specified colormap, title, and color range. T
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plot_tools.show_ug_trio">
-<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">show_ug_trio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snapshot_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.show_ug_trio" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">show_ug_trio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snapshot_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*insert</span> <span class="pre">title</span> <span class="pre">here*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.show_ug_trio" title="Permalink to this definition"></a></dt>
 <dd><p>Displays a figure with three subplots showing velocity norm data from three datasets.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>ds1 (xarray.Dataset): The first dataset.
@@ -391,7 +425,7 @@ Each subplot is formatted with the specified colormap, title, and color range.</
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plot_tools.where_is_this">
-<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">where_is_this</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.where_is_this" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.plot_tools.</span></span><span class="sig-name descname"><span class="pre">where_is_this</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.plot_tools.where_is_this" title="Permalink to this definition"></a></dt>
 <dd><p>Displays a map showing the specified bounding box.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>bbox (list): A list containing the bounding box coordinates in the format [min_lon, max_lon, min_lat, max_lat].
@@ -406,10 +440,10 @@ on the bounding box with a given padding value.</p>
 
 </section>
 <section id="module-tools.processing">
-<span id="tools-processing-module"></span><h2>tools.processing module<a class="headerlink" href="#module-tools.processing" title="Permalink to this heading">¶</a></h2>
+<span id="tools-processing-module"></span><h2>tools.processing module<a class="headerlink" href="#module-tools.processing" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.processing.apply_lamta">
-<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">apply_lamta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_lamta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bathylvl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.apply_lamta" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">apply_lamta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_lamta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bathylvl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.apply_lamta" title="Permalink to this definition"></a></dt>
 <dd><p>Applies the Lagrangian Analysis of Mixing and Tracer Advection (LAMTA) algorithm to the given experiment.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
@@ -432,7 +466,7 @@ various plots related to the analysis.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.processing.compute_filled_map">
-<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">compute_filled_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BC_data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.compute_filled_map" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">compute_filled_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BC_data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.compute_filled_map" title="Permalink to this definition"></a></dt>
 <dd><p>Computes and saves the filled map based on the provided boundary condition data.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>BC_data_path (str): The path to the boundary condition data.
@@ -449,7 +483,7 @@ is that the filled map can be masked by a different resolution land mask without
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.processing.compute_u_v_rv">
-<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">compute_u_v_rv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh_map</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.compute_u_v_rv" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">compute_u_v_rv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh_map</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.compute_u_v_rv" title="Permalink to this definition"></a></dt>
 <dd><p>Computes U, V, and RV (Relative Vorticity) based on the given sea surface height map.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>ssh_map (xarray.Dataset): Sea surface height map containing the ‘ssh’ variable with dimensions (time, lat, lon).</p>
@@ -472,7 +506,7 @@ respectively. The resulting dataset is returned.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.processing.make_mdt">
-<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">make_mdt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_mdt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mdt_hybrid_cnes_cls18_cmems2020_global.nc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.make_mdt" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">make_mdt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_mdt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mdt_hybrid_cnes_cls18_cmems2020_global.nc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.make_mdt" title="Permalink to this definition"></a></dt>
 <dd><p>Checks if the Mean Dynamic Topography (MDT) file is available for a given experiment, and creates it if needed.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
@@ -489,7 +523,7 @@ within the experiment directory. The MDT is then subsetted to the specified boun
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.processing.nc_processing">
-<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">nc_processing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_hours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.nc_processing" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.processing.</span></span><span class="sig-name descname"><span class="pre">nc_processing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">today</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numdays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_hours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.processing.nc_processing" title="Permalink to this definition"></a></dt>
 <dd><p>Performs netCDF processing for the given experiment and time period.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>name_experiment (str): The name of the experiment.
@@ -511,10 +545,10 @@ with the midpoints of each bin.</p>
 
 </section>
 <section id="module-tools.vars">
-<span id="tools-vars-module"></span><h2>tools.vars module<a class="headerlink" href="#module-tools.vars" title="Permalink to this heading">¶</a></h2>
+<span id="tools-vars-module"></span><h2>tools.vars module<a class="headerlink" href="#module-tools.vars" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.vars.h2pv">
-<span class="sig-prename descclassname"><span class="pre">tools.vars.</span></span><span class="sig-name descname"><span class="pre">h2pv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.vars.h2pv" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.vars.</span></span><span class="sig-name descname"><span class="pre">h2pv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.vars.h2pv" title="Permalink to this definition"></a></dt>
 <dd><p>SSH to Q</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>h (2D array): SSH field.
@@ -531,7 +565,7 @@ g (scalar): Acceleration of gravity (m.s-2)</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.vars.h2rv">
-<span class="sig-prename descclassname"><span class="pre">tools.vars.</span></span><span class="sig-name descname"><span class="pre">h2rv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.vars.h2rv" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.vars.</span></span><span class="sig-name descname"><span class="pre">h2rv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.vars.h2rv" title="Permalink to this definition"></a></dt>
 <dd><p>SSH to Q</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>h (2D array): SSH field.
@@ -547,7 +581,7 @@ g (scalar): Acceleration of gravity (m.s-2)</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.vars.h2uv">
-<span class="sig-prename descclassname"><span class="pre">tools.vars.</span></span><span class="sig-name descname"><span class="pre">h2uv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ubc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vbc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.vars.h2uv" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tools.vars.</span></span><span class="sig-name descname"><span class="pre">h2uv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ssh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ubc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vbc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tools.vars.h2uv" title="Permalink to this definition"></a></dt>
 <dd><p>SSH to U,V</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>ssh (2D array): SSH field.
@@ -564,77 +598,38 @@ v (2D array): Meridional velocity</p>
 
 </section>
 <section id="module-tools">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tools" title="Permalink to this heading">¶</a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tools" title="Permalink to this heading"></a></h2>
 </section>
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">tools package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-tools.ftp_transfer">tools.ftp_transfer module</a></li>
-<li><a class="reference internal" href="#module-tools.plot_tools">tools.plot_tools module</a></li>
-<li><a class="reference internal" href="#module-tools.processing">tools.processing module</a></li>
-<li><a class="reference internal" href="#module-tools.vars">tools.vars module</a></li>
-<li><a class="reference internal" href="#module-tools">Module contents</a></li>
-</ul>
-</li>
-</ul>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="NRT_BFN_main_config.html" class="btn btn-neutral float-left" title="NRT_BFN_main_config module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Adrien Stella.</p>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="NRT_BFN_main_config.html"
-                          title="previous chapter">NRT_BFN_main_config module</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/tools.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="NRT_BFN_main_config.html" title="NRT_BFN_main_config module"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">nrt-bfn-qg 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">tools package</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, Adrien Stella.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

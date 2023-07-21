@@ -5,6 +5,7 @@ A wrapper for F. Le Guillou's BFN-QG algorithm which produces dynamic maps of oc
 In particular, the following features are integrated here: data download, pre-processing, visualization of input data, output processing, validation of output data, lagrangian diagnostics, maps upload to external FTP server. When run at the regional scale, this algorithm produces high resolution SSH and geostrophic currents maps, resolving much finer dynamical structures than DUACS, which can be used for better informed glider deployment and ship routing, for example.
 
 See example/ for an example notebook with figures.
+Full documentation : nrt-bfn-qg.readthedocs.io 
 
 ### Main steps of the algorithm: 
 1) Data download:
