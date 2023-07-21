@@ -6,11 +6,17 @@
 Welcome to nrt-bfn-qg's documentation!
 ======================================
 
+A wrapper for BFN-QG - dynamic mapping of ocean topography by altimetric data assimilation. 
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   modules
+   NRT_BFN_main
+   NRT_BFN_main_config
+   tools
+   
 
 Indices and tables
 ==================
