@@ -168,6 +168,7 @@ def nc_processing(name_experiment, today, numdays = 6, frequency_hours = 24):
     interest_period = compute_u_v_rv(interest_period)
 
     if frequency_hours == 24:
+        interest_period = interest_period.assign(time=to_datetime(interest_period.time.dt.date))
         binned_ssh = interest_period.groupby("time").mean("time")
     else:
         from pandas import date_range
